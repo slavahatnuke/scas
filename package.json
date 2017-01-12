@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/slavahatnuke/scas/issues"
   },
-  "homepage": "https://github.com/slavahatnuke/scas#readme"
+  "homepage": "https://github.com/slavahatnuke/scas#readme",
+  "dependencies": {
+    "minimist": "^1.2.0"
+  }
 }
