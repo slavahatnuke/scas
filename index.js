@@ -1,7 +1,8 @@
+var minimist = require('minimist');
 
 var scas = {
     run: function () {
-        var argv = require('minimist')(process.argv.slice(2));
+        var argv = minimist(process.argv.slice(2));
         console.dir(argv);
     }
 };
