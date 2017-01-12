@@ -1,0 +1,25 @@
+{
+  "name": "scas",
+  "version": "0.0.1",
+  "description": "scas",
+  "main": "index.js",
+  "bin": {
+    "scas": "./bin/scas.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/slavahatnuke/scas.git"
+  },
+  "keywords": [
+    "scas"
+  ],
+  "author": "slava hotnuke",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/slavahatnuke/scas/issues"
+  },
+  "homepage": "https://github.com/slavahatnuke/scas#readme"
+}
