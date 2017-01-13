@@ -1,11 +1,11 @@
 module.exports = class CLI {
-    constructor(parser, app) {
+    constructor(parser, scas) {
         this.parser = parser;
-        this.app = app;
+        this.scas = scas;
     }
 
     run(rawArguments) {
         return this.parser.parse(rawArguments)
-            .then((request) => this.app.handle(request));
+            .then((request) => this.scas.handle(request));
     }
 }

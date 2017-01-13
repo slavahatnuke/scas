@@ -13,6 +13,7 @@ describe('cli/Parser', () => {
             assert.deepEqual(request.rawArguments, ['hello', '--flag', '--option', 'optValue'])
             assert.deepEqual(request.arguments, ['hello'])
             assert.deepEqual(request.options, {_: ['hello'], flag: true, option: 'optValue'})
+            assert.deepEqual(request.cwd, require('path').resolve(__dirname + '/../..'))
         });
     })
 
