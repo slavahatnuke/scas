@@ -2,38 +2,43 @@ let Twig = require('twig');
 
 module.exports = class Template {
     constructor(template) {
+        this.init();
+        this.template = this.prepare('' + template)
+    }
+
+    init() {
         this.replaces = [
 
             // {% for ... %}
 
-            // {
-            //     from: '{{%',
-            //     to: '<<<%'
-            // },
-            // {
-            //     from: '%}}',
-            //     to: '%>>>'
-            // }
-            // ,
-            // {
-            //     from: '{%',
-            //     to: '<!%',
-            //     normalize: true
-            // },
-            // {
-            //     from: '%}',
-            //     to: '%!>',
-            //     normalize: true
-            // },
-            // {
-            //     from: '<<<%',
-            //     to: '{%'
-            // },
-            // {
-            //     from: '%>>>',
-            //     to: '%}'
-            // },
-            //
+            {
+                from: '{{%',
+                to: '<<<%'
+            },
+            {
+                from: '%}}',
+                to: '%>>>'
+            }
+            ,
+            {
+                from: '{%',
+                to: '<!%',
+                normalize: true
+            },
+            {
+                from: '%}',
+                to: '%!>',
+                normalize: true
+            },
+            {
+                from: '<<<%',
+                to: '{%'
+            },
+            {
+                from: '%>>>',
+                to: '%}'
+            },
+
             // {{ value }}
             {
                 from: '{{{',
@@ -63,12 +68,20 @@ module.exports = class Template {
             }
         ];
 
-        this.template = this.prepare('' + template)
+        this.replaces = this.replaces.map((replacement) => {
+            let reFrom = replacement.from.split('').map((i) => '\\' + i).join('');
+            let reTo = replacement.to.split('').map((i) => '\\' + i).join('');
+
+            replacement.fromRegExp = new RegExp(reFrom, 'igm');
+            replacement.toRegExp = new RegExp(reTo, 'igm');
+
+            return replacement;
+        });
     }
 
     prepare(template) {
         this.replaces.map((replacement) => {
-            template = template.replace(replacement.from, replacement.to, 'igm')
+            template = template.replace(replacement.fromRegExp, replacement.to)
         });
         return template;
     }
@@ -77,14 +90,12 @@ module.exports = class Template {
         this.replaces
             .filter((replacement) => replacement.normalize)
             .map((replacement) => {
-                value = value.replace(replacement.to, replacement.from, 'igm')
+                value = value.replace(replacement.toRegExp, replacement.from)
             });
         return value;
     }
 
     render(data) {
-        console.log('this.template', this.template);
-
         return Promise.resolve()
             .then(() => {
                 let template = Twig.twig({data: this.template});
