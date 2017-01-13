@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require('../index').run();
+require('../index').container.CLI.run(process.argv.slice(2));

@@ -5,32 +5,42 @@ module.exports = {
             as: 'ng-'
         }
     ],
-
-    commands: {
+    actions: {
         component: {
-            input: ['name', 'dir'],
-            source: 'path/to/component.js',
-            interpolate: ['[[', ']]'],
-            output: '[[dir]]/[[name]].component.js'
+            description: 'short description here',
+            help: 'long description here or move this to file',
+
+            arguments: ['name', 'dir'],
+            options: ['require'],
+
+            input: 'path/to/component.js',
+            output: '{{{dir}}}/{{{name}}}.component.js'
         },
         module: {
-            input: ['name', 'dir'],
-            source: 'path/to/module.js',
-            output: '{{dir}}/{{name}}.module.js'
+            description: 'short description here',
+            help: 'long description here or move this to file',
+
+            arguments: ['name', 'dir'],
+            options: ['require'],
+
+            input: 'path/to/component.js',
+            output: '{{{dir}}}/{{{name}}}.component.js'
         },
         bundle: {
-            input: ['name', 'dir', 'moduleName'],
-            includes: [
+            arguments: ['name', 'dir', 'moduleName'],
+            batch: [
                 'component', {
-                    command: 'module',
+                    action: 'module',
                     map: {
                         name: 'moduleName'
-                    },
-                    input: []
+                    }
                 },
                 'ng-resolver',
                 'ng-can-activate'
             ]
         }
+    },
+    pipes: {
+        camelCase: (context) => (input) => 'camelCaseValueNeedToBeReturned'
     }
 };
