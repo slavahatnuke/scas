@@ -14,7 +14,8 @@ module.exports = {
             options: ['require'],
 
             input: 'path/to/component.js',
-            output: '{{{dir}}}/{{{name}}}.component.js'
+            output: '{{{dir}}}/{{{name}}}.component.js',
+            script: (context) => Promise.resolve().then(() => console.log('custom logic here'))
         },
         module: {
             description: 'short description here',
