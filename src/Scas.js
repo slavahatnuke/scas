@@ -1,4 +1,5 @@
 let Context = require('./context/Context');
+let Workspace = require('./workspace/Workspace');
 
 module.exports = class Scas {
     constructor(configLoader) {
@@ -7,9 +8,8 @@ module.exports = class Scas {
 
     handle(request) {
         return this.getContext(request)
-            .then((context) => {
-
-            });
+            .then((context) => this.getWorkspace(context)
+                .then((workspace) => workspace.handle(request)))
     }
 
     getContext(request) {
@@ -25,5 +25,13 @@ module.exports = class Scas {
                 console.log(context);
             })
             .then(() => context)
+    }
+
+    getWorkspace(context) {
+        let workspace = new Workspace();
+        workspace.context = context;
+
+        return Promise.resolve()
+            .then(() => workspace.load(context));
     }
 }
