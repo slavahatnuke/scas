@@ -12,6 +12,7 @@ module.exports = class Scas {
     getContext(request) {
         let context = new Context();
         context.cwd = request.cwd;
+        context.container = require('../container');
 
         return Promise.resolve()
             .then(() => context.request = request)

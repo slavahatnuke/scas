@@ -1,4 +1,7 @@
 module.exports = {
+    description: 'Help',
+    help: 'Its help - TBD',
+
     actions: {
         help: {
             description: 'Help',

@@ -2,8 +2,10 @@ let _ = require('lodash');
 
 module.exports = class Config {
     constructor(data) {
-        this.imports = [];
+        this.description = '';
+        this.help = '';
 
+        this.imports = [];
         this.actions = {};
         this.pipes = {};
 
