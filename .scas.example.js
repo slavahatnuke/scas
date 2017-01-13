@@ -32,7 +32,7 @@ module.exports = {
             batch: [
                 'component', {
                     action: 'module',
-                    replaces: {
+                    map: {
                         name: 'moduleName'
                     }
                 },

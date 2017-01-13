@@ -6,7 +6,10 @@ module.exports = class Scas {
     }
 
     handle(request) {
-        return this.getContext(request);
+        return this.getContext(request)
+            .then((context) => {
+
+            });
     }
 
     getContext(request) {
