@@ -13,7 +13,7 @@ container.add('WorkspaceService', require('./src/workspace/WorkspaceService'), [
 ]);
 
 container.add('workspace.AutoCompleteHandler', require('./src/workspace/handler/AutoCompleteHandler'), [
-    'workspace.action.Matcher'
+    'Autocompleter'
 ]);
 
 container.add('workspace.CallHandler', require('./src/workspace/handler/CallHandler'), [
@@ -26,8 +26,16 @@ container.add('workspace.action.handlers', (container) => container.find(['actio
 
 container.add('workspace.action.HelpHandler', require('./src/workspace/action/handler/HelpHandler'), []);
 
+
 container.add('HelpService', require('./src/workspace/help/HelpService'), [
     'workspace.action.Matcher'
 ]);
+
+container.add('Autocompleter', require('./src/workspace/autocomplete/Autocompleter'), [
+    'workspace.action.Matcher'
+]);
+
+container.add('Logger', require('./src/logger/_logger'));
+Object.logger = container.Logger;
 
 module.exports = container;

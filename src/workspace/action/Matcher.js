@@ -1,6 +1,8 @@
+let _ = require('lodash');
+
 module.exports = class Matcher {
     constructor() {
-
+        this.logger = Object.logger;
     }
 
     match(workspace, request) {
@@ -15,12 +17,7 @@ module.exports = class Matcher {
         let input = rawArguments.join(' ');
 
         return workspace.actions.find((action) => {
-            let reAction = new RegExp(`^${this.reEscape(action.name)}$`, 'igm');
-            return reAction.test(input);
+            return action.name === input;
         });
-    }
-
-    reEscape(text) {
-        return ('' + text).split('').map((i) => '\\' + i).join('');
     }
 }

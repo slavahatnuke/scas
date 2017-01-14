@@ -3,13 +3,13 @@ let Handler = require('./Handler');
 module.exports = class CallHandler extends Handler {
     constructor(actionMatcher, helpService, actionHandlers) {
         super();
-        this.actionMatcher = actionMatcher;
+        this.autocompleter = actionMatcher;
         this.helpService = helpService;
         this.actionHandlers = actionHandlers;
     }
 
     handle(workspace, request) {
-        return this.actionMatcher.match(workspace, request)
+        return this.autocompleter.match(workspace, request)
             .then((actions) => {
                 if (actions.length == 1) {
                     return this.execute(workspace, actions[0], request);

@@ -6,10 +6,10 @@ let omelette = require('omelette');
 let Handler = require('./Handler');
 
 module.exports = class AutoCompleteHandler extends Handler {
-    constructor(actionMatcher) {
+    constructor(autocompleter) {
         super();
 
-        this.actionMatcher = actionMatcher;
+        this.autocompleter = autocompleter;
     }
 
     handle(workspace, request) {
@@ -42,16 +42,8 @@ module.exports = class AutoCompleteHandler extends Handler {
 
                             return Promise.resolve()
                                 .then(() => {
-                                    return workspace.actions.find()
-                                        .then((actions) => {
-                                            let promises = actions.map((action) => action.getAutocomplete(request));
-
-                                            return Promise.all(promises)
-                                                .then((results) => {
-                                                    words = results.filter((result) => !!result);
-                                                    words.push('--help')
-                                                })
-                                        })
+                                    return this.autocompleter.findAutocomplete(workspace, names)
+                                        .then((theWords) => words = theWords)
                                 })
                                 .then(() => {
                                     complete.init();

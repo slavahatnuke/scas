@@ -2,7 +2,7 @@ let Hint = require('./Hint');
 
 module.exports = class HelpService {
     constructor(actionMatcher) {
-        this.actionMatcher = actionMatcher;
+        this.autocompleter = actionMatcher;
     }
 
     actionsHelp(workspace, actions) {

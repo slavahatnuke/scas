@@ -22,6 +22,12 @@ it will give you some exmaplesn it will give you some exmaples
         },
         hep: {
 
+        },
+
+        component: {
+            title: 'Generates component',
+            arguments: ['name', 'dir'],
+            help: `It will generate component`
         }
     },
     pipes: {

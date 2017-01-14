@@ -5,11 +5,11 @@ module.exports = class Action {
         this.description = config.description || null;
         this.help = config.help || null;
         this.example = config.example || null;
-    }
 
-    load(xxx) {
-        return Promise.resolve()
-            .then(() => this);
+        this.arguments = config.arguments || [];
+        this.options = config.options || [];
+
+        this.active = false;
     }
 
     getAutocomplete(request) {
