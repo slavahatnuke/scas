@@ -5,7 +5,8 @@ module.exports = {
     actions: {
         help: {
             description: 'Help',
-            help: 'Its help - TBD'
+            help: 'Its help - TBD',
+            aliases: ['--help', '-h']
         }
     },
     pipes: {

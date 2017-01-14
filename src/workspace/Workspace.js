@@ -12,9 +12,15 @@ module.exports = class Workspace {
 
     load(context) {
         return Promise.resolve()
-            .then(() => this.imports = new Imports().load(context))
-            .then(() => this.actions = new Actions().load(context))
-            .then(() => this.pipes = new Pipes().load(context))
+            .then(() => new Imports().load(context))
+            .then((imports) => this.imports = imports)
+
+            .then(() => new Actions().load(context))
+            .then((actions) => this.actions = actions)
+
+            .then(() => new Pipes().load(context))
+            .then((pipes) => this.pipes = pipes)
+
             .then(() => this);
     }
 

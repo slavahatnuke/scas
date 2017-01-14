@@ -4,7 +4,8 @@
   "description": "scas",
   "main": "index.js",
   "bin": {
-    "scas": "./bin/scas.js"
+    "scas": "./bin/scas.js",
+    "@scas": "./bin/scas.js"
   },
   "scripts": {
     "test": "mocha --recursive --reporter spec",
