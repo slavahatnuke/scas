@@ -2,14 +2,15 @@ let Context = require('./context/Context');
 let Workspace = require('./workspace/Workspace');
 
 module.exports = class Scas {
-    constructor(configLoader) {
+    constructor(configLoader, workspaceService) {
         this.configLoader = configLoader;
+        this.workspaceService = workspaceService;
     }
 
     handle(request) {
         return this.getContext(request)
             .then((context) => this.getWorkspace(context)
-                .then((workspace) => workspace.handle(request)))
+                .then((workspace) => this.workspaceService.handle(workspace, request)))
     }
 
     getContext(request) {
@@ -22,16 +23,12 @@ module.exports = class Scas {
             .then(() => this.configLoader.load(context))
             .then((config) => context.config = config)
             .then(() => {
-                console.log(context);
+                // console.log(context);
             })
             .then(() => context)
     }
 
     getWorkspace(context) {
-        let workspace = new Workspace();
-        workspace.context = context;
-
-        return Promise.resolve()
-            .then(() => workspace.load(context));
+        return this.workspaceService.create(context);
     }
 }

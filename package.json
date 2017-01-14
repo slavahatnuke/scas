@@ -28,6 +28,7 @@
     "minimist": "^1.2.0",
     "omelette": "^0.3.1",
     "plus.container": "^1.1.16",
+    "spawn-args": "^0.2.0",
     "twig": "^0.10.3"
   },
   "devDependencies": {

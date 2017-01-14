@@ -18,7 +18,4 @@ module.exports = class Workspace {
             .then(() => this);
     }
 
-    handle(request) {
-        return Promise.resolve();
-    }
 }
