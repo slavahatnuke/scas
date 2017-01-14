@@ -6,7 +6,6 @@ module.exports = class CLI {
 
     run(rawArguments) {
         return this.parser.parse(rawArguments)
-            .then((request) => this.scas.handle(request))
-            .catch((err) => console.log(err, err.stack));
+            .then((request) => this.scas.handle(request));
     }
 }

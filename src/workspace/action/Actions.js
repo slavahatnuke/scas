@@ -18,6 +18,10 @@ module.exports = class Actions {
     }
 
     find(finder) {
+        finder = finder || function () {
+                return true;
+            };
+
         return Promise.resolve()
             .then(() => this.actions.filter(finder));
     }

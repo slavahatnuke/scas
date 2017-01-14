@@ -4,10 +4,18 @@ let Pipes = require('./pipe/Pipes');
 
 module.exports = class Workspace {
     constructor() {
+        this.title = null;
+        this.description = null;
+        this.help = null;
+
         this.context = null;
         this.imports = null;
         this.actions = null;
         this.pipes = null;
+    }
+
+    isScsBin() {
+        return process.argv.find((arg) => arg.indexOf('scs') >= 0);
     }
 
     load(context) {
@@ -21,6 +29,11 @@ module.exports = class Workspace {
             .then(() => new Pipes().load(context))
             .then((pipes) => this.pipes = pipes)
 
+            .then(() => {
+                this.title = context.config.title;
+                this.description = context.config.description;
+                this.help = context.config.help;
+            })
             .then(() => this);
     }
 

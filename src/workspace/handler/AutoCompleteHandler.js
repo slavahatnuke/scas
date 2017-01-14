@@ -16,7 +16,7 @@ module.exports = class AutoCompleteHandler extends Handler {
         return Promise.resolve()
             .then(() => {
                 if (request.hasOption('--completion-install')) {
-                    return this.install();
+                    return this.install(workspace);
                 } else {
                     return Promise.resolve()
                         .then(() => {
@@ -30,7 +30,7 @@ module.exports = class AutoCompleteHandler extends Handler {
                             let range = _.range(rangeLength).map((i) => 'action' + i);
 
                             let expected = range.map((name) => `<${name}>`).join(' ');
-                            let complete = this.getCompleter(expected);
+                            let complete = this.getCompleter(workspace, expected);
 
                             let words = [];
 
@@ -66,8 +66,8 @@ module.exports = class AutoCompleteHandler extends Handler {
             });
     }
 
-    getCompleter(expected) {
-        let bin = this.isScsBin() ? 'scs' : 'scas';
+    getCompleter(workspace, expected) {
+        let bin = workspace.isScsBin() ? 'scs' : 'scas';
         this.complete = omelette(bin + ' ' + expected || "<names>");
         return this.complete;
     }
@@ -82,16 +82,12 @@ module.exports = class AutoCompleteHandler extends Handler {
         return minimist(args);
     }
 
-    install() {
+    install(workspace) {
         return Promise.resolve()
             .then(() => {
                 console.log('Installing completion ...');
                 console.log('Completion has been installed.');
-                this.getCompleter().setupShellInitFile()
+                this.getCompleter(workspace).setupShellInitFile()
             });
-    }
-
-    isScsBin() {
-        return process.argv.find((arg) => arg.indexOf('scs') >= 0);
     }
 }

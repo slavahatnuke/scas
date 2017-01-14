@@ -4,10 +4,7 @@ module.exports = class Matcher {
     }
 
     match(workspace, request) {
-        return this.find(workspace, request)
-            .then((actions) => {
-                console.log(actions);
-            });
+        return this.find(workspace, request);
     }
 
     find(workspace, request) {
@@ -34,6 +31,6 @@ module.exports = class Matcher {
     }
 
     reEscape(text) {
-        return (''+text).split('').map((i) => '\\' + i).join('');
+        return ('' + text).split('').map((i) => '\\' + i).join('');
     }
 }

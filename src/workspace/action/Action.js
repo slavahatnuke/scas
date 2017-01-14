@@ -1,8 +1,9 @@
 module.exports = class Action {
     constructor(config) {
         this.name = config.name || null;
-        this.help = config.help || null;
+        this.title = config.title || null;
         this.description = config.description || null;
+        this.help = config.help || null;
         this.example = config.example || null;
     }
 

@@ -17,8 +17,13 @@ container.add('workspace.AutoCompleteHandler', require('./src/workspace/handler/
 ]);
 
 container.add('workspace.CallHandler', require('./src/workspace/handler/CallHandler'), [
-    'workspace.action.Matcher'
+    'workspace.action.Matcher',
+    'HelpService'
 ]);
 container.add('workspace.action.Matcher', require('./src/workspace/action/Matcher'), []);
+
+container.add('HelpService', require('./src/workspace/help/HelpService'), [
+    'workspace.action.Matcher'
+]);
 
 module.exports = container;
