@@ -10,7 +10,7 @@ module.exports = class Actions {
         return Promise.resolve()
             .then(() => {
                 _.each(context.config.actions, (value, name) => {
-                    value.name = name;
+                    value.name = (''+name).trim();
                     this.actions.push(new Action(value))
                 });
             })

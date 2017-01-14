@@ -40,27 +40,23 @@ module.exports = class AutoCompleteHandler extends Handler {
                                 });
                             });
 
-                            Promise.resolve()
+                            return Promise.resolve()
                                 .then(() => {
-                                    return self.actionMatcher.findByRawArguments(workspace, names)
+                                    return workspace.actions.find()
                                         .then((actions) => {
                                             let promises = actions.map((action) => action.getAutocomplete(request));
 
                                             return Promise.all(promises)
                                                 .then((results) => {
                                                     words = results.filter((result) => !!result);
+                                                    words.push('--help')
                                                 })
                                         })
                                 })
                                 .then(() => {
                                     complete.init();
-                                });
-                            //
-                            //
-                            // require('fs').writeFileSync('autocomplate.log', JSON.stringify([
-                            //         request,
-                            //         argv
-                            //     ]) + '\n')
+                                })
+                                .then(() => process.exit(0));
                         });
                 }
             });

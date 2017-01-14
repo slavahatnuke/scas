@@ -7,20 +7,21 @@ It should help you to improve development skills :) `,
     actions: {
         help: {
             title: 'Help',
-            description1: `
+            description: `
 Help about this command to make sure that you understand it please call --help 
 it will give you some exmaplesn it will give you some exmaples
 `,
-            help: 'Its big help when you call --help',
-            aliases: ['--help', '-h']
-        }
-        ,
-        'completion': {
+            help: 'Its big help when you call --help'
+        },
+        'install-it': {
             description: `
             install completion it will speed up your console
 `,
             title: 'Install this util',
             help: 'Its big help when you call --help'
+        },
+        hep: {
+
         }
     },
     pipes: {

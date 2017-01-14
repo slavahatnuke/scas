@@ -73,17 +73,13 @@ module.exports = class WorkspaceService {
 
                 if (hint.description) {
                     console.log(`${this.renderOffset(hint.description, descriptionOffset)}`);
-                }
-
-                let hints = hint.getHints();
-
-                if (hints.length) {
                     console.log('');
                 }
 
+                let hints = hint.getHints();
                 return Promise.all(hints.map((hint) => this.renderHint(hint)))
                     .then(() => {
-                        if (hint.description) {
+                        if (hints.length) {
                             console.log('');
                         }
                     });
