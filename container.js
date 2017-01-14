@@ -18,9 +18,13 @@ container.add('workspace.AutoCompleteHandler', require('./src/workspace/handler/
 
 container.add('workspace.CallHandler', require('./src/workspace/handler/CallHandler'), [
     'workspace.action.Matcher',
-    'HelpService'
+    'HelpService',
+    'workspace.action.handlers'
 ]);
 container.add('workspace.action.Matcher', require('./src/workspace/action/Matcher'), []);
+container.add('workspace.action.handlers', (container) => container.find(['action', 'handler']), ['container']);
+
+container.add('workspace.action.HelpHandler', require('./src/workspace/action/handler/HelpHandler'), []);
 
 container.add('HelpService', require('./src/workspace/help/HelpService'), [
     'workspace.action.Matcher'
