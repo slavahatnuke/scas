@@ -5,7 +5,7 @@
   "main": "index.js",
   "bin": {
     "scas": "./bin/scas.js",
-    "@scas": "./bin/scas.js"
+    "scs": "./bin/scas.js"
   },
   "scripts": {
     "test": "mocha --recursive --reporter spec",

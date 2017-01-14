@@ -8,7 +8,12 @@ module.exports = class WorkspaceService {
 
     handle(workspace, request) {
         return Promise.resolve()
-            .then(() => request.hasOption('--compbash') || request.hasOption('--compgen'))
+            .then(() => {
+                return request.hasOption('--compbash')
+                    || request.hasOption('--compgen')
+                    || request.hasOption('--completion-install')
+                    || request.hasOption('--completion')
+            })
             .then((isAutoComplete) => request.autocomplete = isAutoComplete)
             .then(() => this.getHandler(workspace, request))
             .then((handler) => handler.handle(workspace, request));

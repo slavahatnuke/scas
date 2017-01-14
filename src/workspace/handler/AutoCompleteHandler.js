@@ -15,55 +15,61 @@ module.exports = class AutoCompleteHandler extends Handler {
     handle(workspace, request) {
         return Promise.resolve()
             .then(() => {
-                let self = this;
+                if (request.hasOption('--completion-install')) {
+                    return this.install();
+                } else {
+                    return Promise.resolve()
+                        .then(() => {
+                            let self = this;
 
-                let argv = this.parse(request);
-                let names = argv._;
+                            let argv = this.parse(request);
+                            let names = argv._;
 
-                let length = names.length + 1;
-                let rangeLength = length > 0 ? length : 1;
+                            let length = names.length + 1;
+                            let rangeLength = length > 0 ? length : 1;
+                            let range = _.range(rangeLength).map((i) => 'action' + i);
 
-                let range = _.range(rangeLength).map((i) => 'action' + i);
-                let expected = range.map((name) => `<${name}>`).join(' ');
-                let complete = omelette("scas " + expected);
+                            let expected = range.map((name) => `<${name}>`).join(' ');
+                            let complete = this.getCompleter(expected);
 
-                let words = [];
+                            let words = [];
 
-                range.map((name) => {
-                    complete.on(name, function () {
-                        this.reply(words);
-                    });
-                });
+                            range.map((name) => {
+                                complete.on(name, function () {
+                                    this.reply(words);
+                                });
+                            });
 
-                Promise.resolve()
-                    .then(() => {
-                        return self.actionMatcher.findByRawArguments(workspace, names)
-                            .then((actions) => {
-                                let promises = actions.map((action) => action.getAutocomplete(request));
+                            Promise.resolve()
+                                .then(() => {
+                                    return self.actionMatcher.findByRawArguments(workspace, names)
+                                        .then((actions) => {
+                                            let promises = actions.map((action) => action.getAutocomplete(request));
 
-                                return Promise.all(promises)
-                                    .then((results) => {
-                                        words = results.filter((result) => !!result);
-                                    })
-                            })
-                    })
-                    .then(() => {
-                        complete.init();
-                    });
-                //
-                //
-                // require('fs').writeFileSync('autocomplate.log', JSON.stringify([
-                //         request,
-                //         argv
-                //     ]) + '\n')
-
-// // If you want to have a setup feature, you can use `omeletteInstance.setupShellInitFile()` function.
-//                 if (process.argv.indexOf('--setup')) {
-//                     complete.setupShellInitFile();
-//                     console.log('done');
-//                 }
-
+                                            return Promise.all(promises)
+                                                .then((results) => {
+                                                    words = results.filter((result) => !!result);
+                                                })
+                                        })
+                                })
+                                .then(() => {
+                                    complete.init();
+                                });
+                            //
+                            //
+                            // require('fs').writeFileSync('autocomplate.log', JSON.stringify([
+                            //         request,
+                            //         argv
+                            //     ]) + '\n')
+                        });
+                }
             });
+    }
+
+    getCompleter(expected) {
+        let bin = this.isScsBin() ? 'scs' : 'scas';
+        this.complete = omelette(bin + ' ' + expected || "<names>");
+        return this.complete;
     }
 
     parse(request) {
@@ -74,5 +80,18 @@ module.exports = class AutoCompleteHandler extends Handler {
         args.shift();
 
         return minimist(args);
+    }
+
+    install() {
+        return Promise.resolve()
+            .then(() => {
+                console.log('Installing completion ...');
+                console.log('Completion has been installed.');
+                this.getCompleter().setupShellInitFile()
+            });
+    }
+
+    isScsBin() {
+        return process.argv.find((arg) => arg.indexOf('scs') >= 0);
     }
 }
