@@ -33,6 +33,13 @@ it will give you some exmaplesn it will give you some exmaples
             help: `It will generate component in this way`,
             input: 'test/generate/generate.txt',
             out: '{{{ dir }}}/{{{ name }}}.js'
+        },
+        'class': {
+            title: 'Class maker',
+            arguments: ['name', 'dir'],
+            help: `It generates ES6 class`,
+            input: 'test/generate/class.js',
+            out: '{{{ dir }}}/{{{ name }}}.js'
         }
     },
     pipes: {

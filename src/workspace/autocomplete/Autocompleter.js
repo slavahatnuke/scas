@@ -69,7 +69,7 @@ module.exports = class Autocompleter {
                 }
 
                 if (!args.length) {
-                    return this.getActiveArguments(action);
+                    return this.getNoneActiveArguments(action);
                 }
 
                 return Promise.resolve()
@@ -80,12 +80,12 @@ module.exports = class Autocompleter {
                             if (isLastWordArgument) {
                                 return [];
                             } else {
-                                return this.getActiveArguments(action);
+                                return this.getNoneActiveArguments(action);
                             }
                         } else {
                             // value
                             if (isLastWordArgument) {
-                                return this.getActiveArguments(action);
+                                return this.getNoneActiveArguments(action);
                             } else {
                                 return [];
                             }
@@ -100,52 +100,15 @@ module.exports = class Autocompleter {
                 if (words && words.length) {
                     return words;
                 } else {
-                    let cwd = workspace.context.cwd;
                     return Promise.resolve()
                         .then(() => {
-                            // let last = lastWord;
-                            let last = isLastWordArgument ? '' : lastWord;
-                            let files = new Promise((resolve, reject) => {
-                                glob(last + '*', {cwd: cwd}, (err, files) => err ? reject(err) : resolve(files))
-                            });
-
-                            let dirs = new Promise((resolve, reject) => {
-                                if (last) {
-                                    glob(last + '/*', {cwd: cwd}, (err, files) => err ? reject(err) : resolve(files))
-                                } else {
-                                    resolve([]);
-                                }
-                            });
-
-                            return Promise.all([files, dirs, this.getActiveArguments(action)]).then(([files, dirs, actions]) => {
-                                let words = [].concat(actions, dirs, files);
-                                // this.logger.log('words', words);
-
-                                return Promise.resolve()
-                                    .then(() => {
-                                        let re = new RegExp(`^${this.reEscape(lastWord)}`, 'igm');
-                                        let matchedFolders = words.filter((word) => re.test(word));
-
-                                        if (matchedFolders.length == 1) {
-                                            let folder = matchedFolders[0];
-
-                                            return Promise.resolve()
-                                                .then(() => {
-                                                    return new Promise((resolve, reject) => {
-                                                        fs.lstat(folder, (err, stat) => err ? reject(err) : resolve(stat.isDirectory()))
-                                                    })
-                                                        .catch(() => false)
-                                                })
-                                                .then((isDir) => {
-                                                    if (isDir) {
-                                                        words.push(folder + '/');
-                                                    }
-                                                })
-                                        }
-                                    })
-                                    .then(() => words);
-                            });
-                        });
+                            let path = isLastWordArgument ? '' : lastWord;
+                            return this.readDir(path)
+                                .then((theWords) => {
+                                    words = [].concat(theWords, this.getNoneActiveArguments(action))
+                                });
+                        })
+                        .then(() => words);
                 }
             })
             .then((words) => {
@@ -154,7 +117,53 @@ module.exports = class Autocompleter {
             })
     }
 
-    getActiveArguments(action) {
+    readDir(path) {
+        let files = new Promise((resolve, reject) => {
+            glob(path + '*', {}, (err, files) => err ? reject(err) : resolve(files))
+        });
+
+        let dirs = new Promise((resolve, reject) => {
+            if (path) {
+                glob(path + '/*', {}, (err, files) => err ? reject(err) : resolve(files))
+            } else {
+                resolve([]);
+            }
+        });
+
+        return Promise.all([files, dirs]).then(([files, dirs]) => {
+            let words = [].concat(dirs, files);
+            // this.logger.log('words', words);
+
+            return Promise.resolve()
+                .then(() => {
+                    let re = new RegExp(`^${this.reEscape(path)}`, 'igm');
+                    let matchedFolders = words.filter((word) => re.test(word));
+
+                    if (matchedFolders.length == 1) {
+                        let folder = matchedFolders[0];
+
+                        return Promise.resolve()
+                            .then(() => {
+                                return new Promise((resolve, reject) => {
+                                    fs.lstat(folder, (err, stat) => err ? reject(err) : resolve(stat.isDirectory()))
+                                })
+                                    .catch(() => false)
+                            })
+                            .then((isDir) => {
+                                if (isDir) {
+                                    return this.readDir(folder + '/')
+                                        .then((theWords) => {
+                                            words = theWords;
+                                        });
+                                }
+                            })
+                    }
+                })
+                .then(() => words);
+        });
+    }
+
+    getNoneActiveArguments(action) {
         return action.arguments.filter((arg) => !arg.active)
             .map((arg) => arg.name);
     }
