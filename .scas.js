@@ -42,5 +42,8 @@ it will give you some exmaplesn it will give you some exmaples
             input: 'sandbox/es6/class.js',
             out: '{{{ dir }}}/{{{ name | Camel }}}.js'
         }
+    },
+    pipes: {
+        scasCustomPipe: (context) => (input) => 'scasCustomPipe:' + input
     }
 };
