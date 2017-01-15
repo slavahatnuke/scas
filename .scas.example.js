@@ -2,7 +2,7 @@ module.exports = {
     imports: [
         {
             path: '/path/to/angular2/.scas.js',
-            as: 'ng-'
+            as: 'ng'
         }
     ],
     actions: {
