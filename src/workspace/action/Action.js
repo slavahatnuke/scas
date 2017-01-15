@@ -18,6 +18,10 @@ module.exports = class Action {
         this.prepareOptions(config);
 
         this.active = false;
+
+        this.imports = config.imports || [];
+        this.actions = config.actions || {};
+        this.pipes = config.pipes || {};
     }
 
     prepareOptions(config) {

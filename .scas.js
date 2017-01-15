@@ -10,13 +10,13 @@ It should help you to improve development skills :) `,
 
 
     imports: [
-        // {
-        //     path: 'sandbox/imports/scas1',
-        //     as: 'imported'
-        // },
         {
-            path: 'sandbox/imports/scas2'
-        }
+            path: 'sandbox/imports/scas1',
+            as: 'imported'
+        },
+        // {
+        //     path: 'sandbox/imports/scas2'
+        // }
     ],
 
     actions: {

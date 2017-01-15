@@ -20,32 +20,41 @@ module.exports = class Loader {
             .then((context) => {
                 return Promise.resolve()
                     .then(() => {
-                            let importedWorkspace = new Workspace();
+                        let importedWorkspace = new Workspace();
 
                         return Promise.resolve()
                             .then(() => importedWorkspace.load(context))
                             .then(() => {
-                                if(aImport.as) {
-                                    console.log('ImportTBD');
+                                if (aImport.as) {
+                                    return this.nestedImport(workspace, importedWorkspace, aImport);
                                 } else {
-                                    return Promise.resolve()
-                                        .then(() => importedWorkspace.actions.find())
-                                        .then((actions) => {
-                                            return Promise.all(actions.map((action) => {
-                                                let importedAction = new ImportedAction(action.config);
-                                                importedAction.workspace = importedWorkspace;
-
-                                                return Promise.resolve()
-                                                    .then(() => workspace.actions.add(importedAction))
-                                            }));
-                                        });
+                                    return this.plainImport(workspace, importedWorkspace);
                                 }
-
                             });
-
-
-                        // console.log(config);
                     });
+            });
+    }
+
+    nestedImport(workspace, importedWorkspace, aImport) {
+        let importedAction = new ImportedAction(importedWorkspace.context.config);
+        importedAction.name = aImport.as;
+        importedAction.workspace = importedWorkspace;
+
+        return Promise.resolve()
+            .then(() => workspace.actions.add(importedAction))
+    }
+
+    plainImport(workspace, importedWorkspace) {
+        return Promise.resolve()
+            .then(() => importedWorkspace.actions.find())
+            .then((actions) => {
+                return Promise.all(actions.map((action) => {
+                    let importedAction = new ImportedAction(action.config);
+                    importedAction.workspace = importedWorkspace;
+
+                    return Promise.resolve()
+                        .then(() => workspace.actions.add(importedAction))
+                }));
             });
     }
 
