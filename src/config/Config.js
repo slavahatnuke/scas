@@ -28,7 +28,7 @@ module.exports = class Config {
     }
 
     set path(value) {
-        this._path = value;
+        this._path = require('path').resolve(value);
         this.dir = require('path').dirname(this.path);
     }
 

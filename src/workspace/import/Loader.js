@@ -20,23 +20,30 @@ module.exports = class Loader {
             .then((context) => {
                 return Promise.resolve()
                     .then(() => {
-                        if(aImport.as) {
-                            console.log('ImportTBD');
-                        } else {
                             let importedWorkspace = new Workspace();
-                            return Promise.resolve()
-                                .then(() => importedWorkspace.load(context))
-                                .then(() => importedWorkspace.actions.find())
-                                .then((actions) => {
-                                    return Promise.all(actions.map((action) => {
-                                        let importedAction = new ImportedAction(action.config);
-                                        importedAction.workspace = importedWorkspace;
 
-                                        return Promise.resolve()
-                                            .then(() => workspace.actions.add(importedAction))
-                                    }));
-                                });
-                        }
+                        return Promise.resolve()
+                            .then(() => importedWorkspace.load(context))
+                            .then(() => {
+                                if(aImport.as) {
+                                    console.log('ImportTBD');
+                                } else {
+                                    return Promise.resolve()
+                                        .then(() => importedWorkspace.actions.find())
+                                        .then((actions) => {
+                                            return Promise.all(actions.map((action) => {
+                                                let importedAction = new ImportedAction(action.config);
+                                                importedAction.workspace = importedWorkspace;
+
+                                                return Promise.resolve()
+                                                    .then(() => workspace.actions.add(importedAction))
+                                            }));
+                                        });
+                                }
+
+                            });
+
+
                         // console.log(config);
                     });
             });

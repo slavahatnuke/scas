@@ -19,11 +19,11 @@ module.exports = class GenerateHandler extends Handler {
 
                 let renderContext = action.getParameters({
                     $$context: workspace.context,
-                    $$workspace: workspace
+                    $$workspace: action.workspace
                 });
 
                 return Promise.resolve()
-                    .then(() => this.templateService.getObjectTemplate(workspace, action, renderContext))
+                    .then(() => this.templateService.getObjectTemplate(action.workspace, action, renderContext))
                     .then(($action) => {
                         return Promise.resolve()
                             .then(() => $action.get('input'))
@@ -32,7 +32,7 @@ module.exports = class GenerateHandler extends Handler {
                                 input = action.workspace.context.dir + '/' + input;
 
                                 let hint = new Hint('input');
-                                hint.title = input;
+                                hint.title = input.replace(workspace.context.dir + '/', '');
 
                                 result.add(hint);
                                 return Promise.resolve()
@@ -42,7 +42,7 @@ module.exports = class GenerateHandler extends Handler {
                                         });
                                     });
                             })
-                            .then((input) => this.templateService.getTemplate(workspace, input))
+                            .then((input) => this.templateService.getTemplate(action.workspace, input))
                             .then((template) => template.render(renderContext))
                             .then((out) => {
                                 return Promise.resolve()
