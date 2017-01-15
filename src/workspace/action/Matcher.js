@@ -53,6 +53,7 @@ module.exports = class Matcher {
     }
 
     reEscape(text) {
+        // TODO use _.escapeRegExp
         return ('' + text).replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     }
 

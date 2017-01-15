@@ -21,4 +21,21 @@ describe('template/Template.js', () => {
                 assert.equal(result, ' a,  b,  c,  {% must be left %}')
             });
     })
+
+    it('render {{{ name | ok }}}', () => {
+        let template = new Template('Hello {{{ name | ok}}}');
+
+        ;
+
+        return Promise.resolve()
+            .then(() => template.setPipes({ok: (input) => input + '+ok'}))
+            .then(() => {
+                return template
+                    .render({name: 'slava'})
+                    .then((result) => {
+                        assert.equal(result, 'Hello slava+ok')
+                    });
+            })
+    })
+
 })

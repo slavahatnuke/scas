@@ -26,6 +26,7 @@ module.exports = class WorkspaceService {
     create(context) {
         let workspace = new Workspace();
         workspace.context = context;
+        // ??? context.workspace = workspace
 
         return Promise.resolve()
             .then(() => workspace.load(context));

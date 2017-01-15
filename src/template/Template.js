@@ -1,4 +1,5 @@
 let Twig = require('twig');
+let _ = require('lodash');
 
 module.exports = class Template {
     constructor(template) {
@@ -101,5 +102,11 @@ module.exports = class Template {
                 let template = Twig.twig({data: this.template});
                 return this.normalize(template.render(data));
             });
+    }
+
+    setPipes(pipes) {
+        return Promise.resolve()
+            .then(() => _.assign(Twig.filters, pipes))
+            .then(() => this);
     }
 }

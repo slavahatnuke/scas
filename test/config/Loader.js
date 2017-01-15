@@ -18,6 +18,9 @@ describe('config/Loader', () => {
                             }
                         },
                         "imports": [],
+                        "description": "",
+                        "help": "",
+
                         "pipes": {}
                     }
                 )

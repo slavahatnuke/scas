@@ -183,6 +183,7 @@ module.exports = class Autocompleter {
     // }
 
     reEscape(text) {
+        // // TODO use _.escapeRegExp
         return ('' + text).replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     }
 
