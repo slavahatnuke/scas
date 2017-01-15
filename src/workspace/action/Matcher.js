@@ -10,31 +10,46 @@ module.exports = class Matcher {
     }
 
     find(workspace, request) {
-        return this.findArguments(workspace, request.rawArguments);
+        let command = _.first(request.rawArguments);
+
+        return Promise.resolve()
+            .then(() => {
+                return workspace.actions.find((action) => {
+                    if (command == action.name) {
+                        action.active = true;
+                        return true;
+                    }
+
+                    return false;
+                });
+            })
     }
 
 
     fillArguments(args, action) {
-        let currentArgumentName = null;
+        return Promise.resolve()
+            .then(() => {
+                let currentArgumentName = null;
 
-        args.map((arg, idx) => {
-            if (idx % 2) {
-                // value case
-                let actionArgument = action.arguments.find((actionArgument) => actionArgument.name == currentArgumentName);
+                args.map((arg, idx) => {
+                    if (idx % 2) {
+                        // value case
+                        let actionArgument = action.arguments.find((actionArgument) => actionArgument.name == currentArgumentName);
 
-                if (actionArgument) {
-                    actionArgument.value = arg;
-                    actionArgument.active = true;
-                }
-            } else {
-                //argument case
-                currentArgumentName = arg;
-                let actionArgument = action.arguments.find((actionArgument) => actionArgument.name == currentArgumentName);
-                if (actionArgument) {
-                    actionArgument.active = true;
-                }
-            }
-        });
+                        if (actionArgument) {
+                            actionArgument.value = arg;
+                            actionArgument.active = true;
+                        }
+                    } else {
+                        //argument case
+                        currentArgumentName = arg;
+                        let actionArgument = action.arguments.find((actionArgument) => actionArgument.name == currentArgumentName);
+                        if (actionArgument) {
+                            actionArgument.active = true;
+                        }
+                    }
+                });
+            });
     }
 
     findArguments(workspace, rawArguments) {
