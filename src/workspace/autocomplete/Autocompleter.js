@@ -13,7 +13,7 @@ module.exports = class Autocompleter {
         // this.logger.log(rawArguments);
 
         let command = _.first(rawArguments);
-        let commandStarts = new RegExp(`^${this.reEscape(command)}`, 'igm');
+        let commandStarts = new RegExp(`^${_.escapeRegExp('' + command)}`, 'igm');
 
         return Promise.resolve()
             .then(() => {
@@ -157,34 +157,6 @@ module.exports = class Autocompleter {
     getNoneActiveArguments(action) {
         return action.arguments.filter((arg) => !arg.active)
             .map((arg) => arg.name);
-    }
-
-    // fillActionArguments(args, action) {
-    //     let currentArgumentName = null;
-    //
-    //     args.map((arg, idx) => {
-    //         if (idx % 2) {
-    //             // value case
-    //             let actionArgument = action.arguments.find((actionArgument) => actionArgument.name == currentArgumentName);
-    //
-    //             if (actionArgument) {
-    //                 actionArgument.value = arg;
-    //                 actionArgument.active = true;
-    //             }
-    //         } else {
-    //             //argument case
-    //             currentArgumentName = arg;
-    //             let actionArgument = action.arguments.find((actionArgument) => actionArgument.name == currentArgumentName);
-    //             if (actionArgument) {
-    //                 actionArgument.active = true;
-    //             }
-    //         }
-    //     });
-    // }
-
-    reEscape(text) {
-        // // TODO use _.escapeRegExp
-        return ('' + text).replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     }
 
 }

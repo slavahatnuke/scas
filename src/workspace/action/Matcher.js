@@ -11,7 +11,7 @@ module.exports = class Matcher {
 
     find(workspace, request) {
         let command = _.first(request.rawArguments);
-        let commandStarts = new RegExp(`^${this.reEscape(command)}$`, 'igm');
+        let commandStarts = new RegExp(`^${_.escapeRegExp('' + command)}$`, 'igm');
 
         return Promise.resolve()
             .then(() => {
@@ -51,10 +51,4 @@ module.exports = class Matcher {
                 });
             });
     }
-
-    reEscape(text) {
-        // TODO use _.escapeRegExp
-        return ('' + text).replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-    }
-
 }
