@@ -3,10 +3,10 @@ module.exports = {
     description: `Imported description`,
     help: 'There is help',
 
-    // imports: [{
-    //     path: 'scas2',
-    //     as: 'scas2'
-    // }],
+    imports: [{
+        path: 'scas2',
+        as: 'vat'
+    }],
     actions: {
         abc: {
             title: 'Imported 1 command',

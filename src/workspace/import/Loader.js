@@ -62,6 +62,7 @@ module.exports = class Loader {
     getImportContext(workspace, aImport) {
         let context = new Context();
         context.configPath = aImport.path;
+        context.dir = workspace.context.dir;
         context.imported = true;
 
         return Promise.resolve()

@@ -28,7 +28,12 @@ module.exports = class Loader {
         return Promise.resolve()
             .then(() => require(context.configPath))
             .then(() => context.configPath)
-            .catch(() => null);
-
+            .catch(() => null)
+            .then((path) => {
+                return path || Promise.resolve()
+                        .then(() => require(context.dir + '/' + context.configPath))
+                        .then(() => context.dir + '/' + context.configPath)
+                        .catch(() => null);
+            })
     }
 };
