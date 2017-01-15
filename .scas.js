@@ -27,7 +27,9 @@ it will give you some exmaplesn it will give you some exmaples
         component: {
             title: 'Generates component',
             arguments: ['name', 'dir'],
-            help: `It will generate component`
+            help: `It will generate component`,
+            input: 'test/generate/generate.txt',
+            out: '{{{ dir }}}/{{{ name }}}.js'
         }
     },
     pipes: {

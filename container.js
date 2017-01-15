@@ -24,6 +24,7 @@ container.add('workspace.CallHandler', require('./src/workspace/handler/CallHand
 container.add('workspace.action.Matcher', require('./src/workspace/action/Matcher'), []);
 container.add('workspace.action.handlers', (container) => container.find(['action', 'handler']), ['container']);
 
+container.add('workspace.action.GenerateHandler', require('./src/workspace/action/handler/GenerateHandler'), []);
 container.add('workspace.action.HelpHandler', require('./src/workspace/action/handler/HelpHandler'), []);
 
 

@@ -22,7 +22,7 @@ module.exports = class CallHandler extends Handler {
     }
 
     execute(workspace, action, request) {
-        return this.actionMatcher.fillArguments(request.arguments, action)
+        return this.actionMatcher.fillArguments(request.arguments.slice(1), action)
             .then(() => {
                 return this.getActionHandler(workspace, action, request)
                     .then((handler) => handler.handle(workspace, action, request))

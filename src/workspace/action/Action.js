@@ -6,10 +6,25 @@ module.exports = class Action {
         this.help = config.help || null;
         this.example = config.example || null;
 
+        this.input = config.input || null;
+        this.out = config.out || null;
+
         this.prepareArguments(config);
-        this.options = config.options || [];
+        this.prepareOptions(config);
 
         this.active = false;
+    }
+
+    prepareOptions(config) {
+        this.options = (config.options || []).map((option) => {
+            return {
+                name: option,
+                title: null,
+                description: null,
+                active: false,
+                value: null
+            };
+        });
     }
 
     prepareArguments(config) {
@@ -18,9 +33,24 @@ module.exports = class Action {
                 name: name,
                 title: null,
                 description: null,
-                active: false
+                active: false,
+                value: null
             };
         });
+    }
+
+    getParameters(defaults) {
+        let params = defaults || {};
+
+        this.arguments.map((argument) => {
+            params[argument.name] = argument.value;
+        });
+
+        this.options.map((option) => {
+            params[option.name] = option.value;
+        });
+
+        return params;
     }
 
 
