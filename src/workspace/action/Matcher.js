@@ -11,6 +11,7 @@ module.exports = class Matcher {
 
     find(workspace, request) {
         let command = _.first(request.rawArguments);
+        let commandStarts = new RegExp(`^${this.reEscape(command)}$`, 'igm');
 
         return Promise.resolve()
             .then(() => {
@@ -20,11 +21,10 @@ module.exports = class Matcher {
                         return true;
                     }
 
-                    return false;
+                    return commandStarts.test(action.name);
                 });
             })
     }
-
 
     fillArguments(args, action) {
         return Promise.resolve()
@@ -52,11 +52,8 @@ module.exports = class Matcher {
             });
     }
 
-    findArguments(workspace, rawArguments) {
-        let input = rawArguments.join(' ');
-
-        return workspace.actions.find((action) => {
-            return action.name === input;
-        });
+    reEscape(text) {
+        return ('' + text).replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     }
+
 }

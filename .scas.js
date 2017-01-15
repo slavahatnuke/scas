@@ -21,13 +21,16 @@ it will give you some exmaplesn it will give you some exmaples
             help: 'Its big help when you call --help'
         },
         hep: {
-
+            title: 'Hep is help tester'
         },
-
+        com: {
+            title: 'Co is component tester'
+        },
         component: {
             title: 'Generates component',
             arguments: ['name', 'dir'],
-            help: `It will generate component`,
+            description: `Some info here`,
+            help: `It will generate component in this way`,
             input: 'test/generate/generate.txt',
             out: '{{{ dir }}}/{{{ name }}}.js'
         }

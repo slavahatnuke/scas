@@ -14,7 +14,7 @@ module.exports = class CallHandler extends Handler {
                 if (actions.length == 1) {
                     return this.execute(workspace, actions[0], request);
                 } else if (actions.length) {
-                    return this.helpService.actionsHelp(workspace);
+                    return this.helpService.actionsHelp(workspace, actions);
                 } else {
                     return this.helpService.help(workspace);
                 }
@@ -23,9 +23,14 @@ module.exports = class CallHandler extends Handler {
 
     execute(workspace, action, request) {
         return this.actionMatcher.fillArguments(request.arguments.slice(1), action)
-            .then(() => {
-                return this.getActionHandler(workspace, action, request)
-                    .then((handler) => handler.handle(workspace, action, request))
+            .then(() => action.isValid())
+            .then((isValid) => {
+                if (isValid) {
+                    return this.getActionHandler(workspace, action, request)
+                        .then((handler) => handler.handle(workspace, action, request));
+                } else {
+                    return this.helpService.actionHelp(workspace, action)
+                }
             });
     }
 

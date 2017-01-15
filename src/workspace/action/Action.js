@@ -1,3 +1,5 @@
+let _ = require('lodash');
+
 module.exports = class Action {
     constructor(config) {
         this.name = config.name || null;
@@ -53,5 +55,13 @@ module.exports = class Action {
         return params;
     }
 
+    isValid() {
+        return _.every(this.arguments, (arg) => arg.active && arg.value !== null);
+    }
 
+    getRequires() {
+        return this.arguments
+            .filter((arg) => !arg.active || arg.value == null)
+            .map((arg) => arg.name);
+    }
 }

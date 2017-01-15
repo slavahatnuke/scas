@@ -2,12 +2,13 @@ let Handler = require('./Handler');
 let Hint = require('../../help/Hint');
 
 module.exports = class HelpHandler extends Handler {
-    constructor() {
+    constructor(helpService) {
         super();
+        this.helpService = helpService;
     }
 
     handle(workspace, action, request) {
-        return Promise.resolve().then(() => new Hint(action.help));
+        return Promise.resolve().then(() => this.helpService.actionHelp(workspace, action));
     }
 
     supports(workspace, action, request) {

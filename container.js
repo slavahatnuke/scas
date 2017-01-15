@@ -25,12 +25,10 @@ container.add('workspace.action.Matcher', require('./src/workspace/action/Matche
 container.add('workspace.action.handlers', (container) => container.find(['action', 'handler']), ['container']);
 
 container.add('workspace.action.GenerateHandler', require('./src/workspace/action/handler/GenerateHandler'), []);
-container.add('workspace.action.HelpHandler', require('./src/workspace/action/handler/HelpHandler'), []);
+container.add('workspace.action.HelpHandler', require('./src/workspace/action/handler/HelpHandler'), ['HelpService']);
 
 
-container.add('HelpService', require('./src/workspace/help/HelpService'), [
-    'workspace.action.Matcher'
-]);
+container.add('HelpService', require('./src/workspace/help/HelpService'), []);
 
 container.add('Autocompleter', require('./src/workspace/autocomplete/Autocompleter'), [
     'workspace.action.Matcher'

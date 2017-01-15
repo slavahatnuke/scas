@@ -3,6 +3,8 @@ module.exports = class Hint {
         this._name = name;
         this._title = '';
         this._description = '';
+        this._help = '';
+
         this._level = 0;
 
         this.hints = [];
@@ -40,8 +42,16 @@ module.exports = class Hint {
         this._description = value;
     }
 
+    get help() {
+        return this._help || '';
+    }
+
+    set help(value) {
+        this._help = value;
+    }
+
     add(hint) {
-        hint._level = this._level + 1;
+        hint.level = this.level + 1;
         this.hints.push(hint);
         return this;
     }

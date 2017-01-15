@@ -66,13 +66,19 @@ module.exports = class WorkspaceService {
                 let titleOffsetLength = 25;
 
                 let leftOffset = hint.level * 4;
-                let titleOffset = titleOffsetLength - hint.name.length;
+                let titleOffset = leftOffset + titleOffsetLength - hint.name.length;
                 let descriptionOffset = leftOffset + 2;
+                let helpOffset = leftOffset + 4;
 
                 console.log(`${this.renderOffset(hint.name, leftOffset)}${this.renderOffset(hint.title, titleOffset)}`);
 
                 if (hint.description) {
                     console.log(`${this.renderOffset(hint.description, descriptionOffset)}`);
+                    console.log('');
+                }
+
+                if (hint.help) {
+                    console.log(`${this.renderOffset(hint.help, helpOffset)}`);
                     console.log('');
                 }
 
