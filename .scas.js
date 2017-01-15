@@ -1,4 +1,6 @@
 let _ = require('lodash');
+let pluralize = require('pluralize');
+
 
 module.exports = {
     title: '$ scas [actions] <arguments> <options>',
@@ -72,6 +74,13 @@ it will give you some exmaplesn it will give you some exmaples
         trim: (context) => (input) => _.trim(input),
 
         trimStart: (context) => (input) => _.trimStart(input),
-        trimEnd: (context) => (input) => _.trimEnd(input)
+        trimEnd: (context) => (input) => _.trimEnd(input),
+
+        plural: (context) => (input) => pluralize.plural(input),
+        Plural: (context) => (input) => _.upperFirst(pluralize.plural(input)),
+
+        singular: (context) => (input) => pluralize.singular(input),
+        Singular: (context) => (input) => _.upperFirst(pluralize.singular(input))
+
     }
 };

@@ -30,6 +30,7 @@
     "lodash": "^4.17.4",
     "minimist": "^1.2.0",
     "omelette": "^0.3.1",
+    "pluralize": "^3.1.0",
     "plus.container": "^1.1.16",
     "spawn-args": "^0.2.0",
     "twig": "^0.10.3"
