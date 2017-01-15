@@ -1,5 +1,5 @@
 .idea
 node_modules
 *.log
-sandbox/tmp/*
-!sandbox/tmp/.gitkeep
+tmp/*
+!tmp/.gitkeep
