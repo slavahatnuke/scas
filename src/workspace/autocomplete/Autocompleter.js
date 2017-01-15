@@ -1,5 +1,6 @@
 let _ = require('lodash');
 let glob = require('glob');
+let fs = require('fs');
 
 module.exports = class Autocompleter {
     constructor(actionMatcher) {
@@ -8,6 +9,9 @@ module.exports = class Autocompleter {
     }
 
     findAutocomplete(workspace, rawArguments) {
+
+        // this.logger.log(rawArguments);
+
         let command = _.first(rawArguments);
         let commandStarts = new RegExp(`^${this.reEscape(command)}`, 'igm');
 
@@ -114,8 +118,32 @@ module.exports = class Autocompleter {
                             });
 
                             return Promise.all([files, dirs, this.getActiveArguments(action)]).then(([files, dirs, actions]) => {
-                                // this.logger.log('lastWord', last + '*')
-                                return [].concat(actions, dirs, files);
+                                let words = [].concat(actions, dirs, files);
+                                // this.logger.log('words', words);
+
+                                return Promise.resolve()
+                                    .then(() => {
+                                        let re = new RegExp(`^${this.reEscape(lastWord)}`, 'igm');
+                                        let matchedFolders = words.filter((word) => re.test(word));
+
+                                        if (matchedFolders.length == 1) {
+                                            let folder = matchedFolders[0];
+
+                                            return Promise.resolve()
+                                                .then(() => {
+                                                    return new Promise((resolve, reject) => {
+                                                        fs.lstat(folder, (err, stat) => err ? reject(err) : resolve(stat.isDirectory()))
+                                                    })
+                                                        .catch(() => false)
+                                                })
+                                                .then((isDir) => {
+                                                    if (isDir) {
+                                                        words.push(folder + '/');
+                                                    }
+                                                })
+                                        }
+                                    })
+                                    .then(() => words);
                             });
                         });
                 }
