@@ -119,24 +119,15 @@ module.exports = class Autocompleter {
 
     readDir(path) {
         let files = new Promise((resolve, reject) => {
-            glob(path + '*', {}, (err, files) => err ? reject(err) : resolve(files))
+            glob(path + '*', {dot: true}, (err, files) => err ? reject(err) : resolve(files))
         });
 
-        let dirs = new Promise((resolve, reject) => {
-            if (path) {
-                glob(path + '/*', {}, (err, files) => err ? reject(err) : resolve(files))
-            } else {
-                resolve([]);
-            }
-        });
-
-        return Promise.all([files, dirs]).then(([files, dirs]) => {
-            let words = [].concat(dirs, files);
-            // this.logger.log('words', words);
+        return files.then((files) => {
+            let words = [].concat(files);
 
             return Promise.resolve()
                 .then(() => {
-                    let re = new RegExp(`^${this.reEscape(path)}`, 'igm');
+                    let re = new RegExp(`^${path}`, 'igm');
                     let matchedFolders = words.filter((word) => re.test(word));
 
                     if (matchedFolders.length == 1) {
