@@ -13,6 +13,30 @@ module.exports = class Matcher {
         return this.findArguments(workspace, request.rawArguments);
     }
 
+
+    fillArguments(args, action) {
+        let currentArgumentName = null;
+
+        args.map((arg, idx) => {
+            if (idx % 2) {
+                // value case
+                let actionArgument = action.arguments.find((actionArgument) => actionArgument.name == currentArgumentName);
+
+                if (actionArgument) {
+                    actionArgument.value = arg;
+                    actionArgument.active = true;
+                }
+            } else {
+                //argument case
+                currentArgumentName = arg;
+                let actionArgument = action.arguments.find((actionArgument) => actionArgument.name == currentArgumentName);
+                if (actionArgument) {
+                    actionArgument.active = true;
+                }
+            }
+        });
+    }
+
     findArguments(workspace, rawArguments) {
         let input = rawArguments.join(' ');
 
