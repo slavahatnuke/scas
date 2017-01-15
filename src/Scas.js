@@ -22,9 +22,6 @@ module.exports = class Scas {
             .then(() => context.request = request)
             .then(() => this.configLoader.load(context))
             .then((config) => context.config = config)
-            .then(() => {
-                // console.log(context);
-            })
             .then(() => context)
     }
 

@@ -3,9 +3,10 @@ let Hint = require('./help/Hint');
 let _ = require('lodash');
 
 module.exports = class WorkspaceService {
-    constructor(autoCompleteHandler, callHandler) {
+    constructor(autoCompleteHandler, callHandler, helpService) {
         this.autoCompleteHandler = autoCompleteHandler;
         this.callHandler = callHandler;
+        this.helpService = helpService;
     }
 
     handle(workspace, request) {
@@ -24,12 +25,8 @@ module.exports = class WorkspaceService {
     }
 
     create(context) {
-        let workspace = new Workspace();
-        workspace.context = context;
-        // ??? context.workspace = workspace
-
         return Promise.resolve()
-            .then(() => workspace.load(context));
+            .then(() => new Workspace().load(context))
     }
 
     getHandler(workspace, request) {
@@ -45,7 +42,7 @@ module.exports = class WorkspaceService {
 
     render(result) {
         if (result instanceof Hint) {
-            return this.renderHint(result);
+            return this.helpService.renderHint(result);
         } else {
             console.log('>> result', result);
         }
@@ -55,42 +52,4 @@ module.exports = class WorkspaceService {
         console.error(error, error.stack);
     }
 
-    renderOffset(text, offset) {
-        offset = offset >= 0 ? offset : 0;
-        return ('' + text).trim().split(/\n/igm).map((line) => _.repeat(' ', offset) + line.trim()).join('\n');
-    }
-
-    renderHint(hint) {
-        return Promise.resolve()
-            .then(() => {
-
-                let titleOffsetLength = 25;
-
-                let leftOffset = hint.level * 4;
-                let titleOffset = leftOffset + titleOffsetLength - hint.name.length;
-                let descriptionOffset = leftOffset + 2;
-                let helpOffset = leftOffset + 4;
-
-                console.log(`${this.renderOffset(hint.name, leftOffset)}${this.renderOffset(hint.title, titleOffset)}`);
-
-                if (hint.description) {
-                    console.log(`${this.renderOffset(hint.description, descriptionOffset)}`);
-                    console.log('');
-                }
-
-                if (hint.help) {
-                    console.log(`${this.renderOffset(hint.help, helpOffset)}`);
-                    console.log('');
-                }
-
-                let hints = hint.getHints();
-                return Promise.all(hints.map((hint) => this.renderHint(hint)))
-                    .then(() => {
-                        if (hints.length) {
-                            console.log('');
-                        }
-                    });
-
-            });
-    }
 }

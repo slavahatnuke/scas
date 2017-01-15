@@ -1,4 +1,5 @@
 let Hint = require('./Hint');
+let _ = require('lodash');
 
 module.exports = class HelpService {
     constructor() {
@@ -64,5 +65,45 @@ module.exports = class HelpService {
                 });
             })
             .then(() => hint)
+    }
+
+
+    renderOffset(text, offset) {
+        offset = offset >= 0 ? offset : 0;
+        return ('' + text).trim().split(/\n/igm).map((line) => _.repeat(' ', offset) + line.trim()).join('\n');
+    }
+
+    renderHint(hint) {
+        return Promise.resolve()
+            .then(() => {
+
+                let titleOffsetLength = 25;
+
+                let leftOffset = hint.level * 4;
+                let titleOffset = leftOffset + titleOffsetLength - hint.name.length;
+                let descriptionOffset = leftOffset + 2;
+                let helpOffset = leftOffset + 4;
+
+                console.log(`${this.renderOffset(hint.name, leftOffset)}${this.renderOffset(hint.title, titleOffset)}`);
+
+                if (hint.description) {
+                    console.log(`${this.renderOffset(hint.description, descriptionOffset)}`);
+                    console.log('');
+                }
+
+                if (hint.help) {
+                    console.log(`${this.renderOffset(hint.help, helpOffset)}`);
+                    console.log('');
+                }
+
+                let hints = hint.getHints();
+                return Promise.all(hints.map((hint) => this.renderHint(hint)))
+                    .then(() => {
+                        if (hints.length) {
+                            console.log('');
+                        }
+                    });
+
+            });
     }
 }

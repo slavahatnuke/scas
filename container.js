@@ -9,7 +9,8 @@ container.add('config.Loader', require('./src/config/Loader'), []);
 
 container.add('WorkspaceService', require('./src/workspace/WorkspaceService'), [
     'workspace.AutoCompleteHandler',
-    'workspace.CallHandler'
+    'workspace.CallHandler',
+    'HelpService'
 ]);
 
 container.add('workspace.AutoCompleteHandler', require('./src/workspace/handler/AutoCompleteHandler'), [

@@ -8,6 +8,18 @@ module.exports = {
 It should help you to improve development skills :) `,
     help: 'scas|scs help TBD',
 
+
+    imports: [
+        {
+            path: 'sandbox/imports/scas1',
+            as: 'imported'
+        }
+        // ,
+        // {
+        //     path: 'sandbox/imports/scas2'
+        // }
+    ],
+
     actions: {
         help: {
             title: 'Help',
@@ -17,16 +29,16 @@ it will give you some exmaplesn it will give you some exmaples
 `,
             help: 'Its big help when you call --help'
         },
-        'install-it': {
-            description: `
-            install completion it will speed up your console
-`,
-            title: 'Install this util',
-            help: 'Its big help when you call --help'
-        },
-        hep: {
-            title: 'Hep is help tester'
-        },
+//         'install-it': {
+//             description: `
+//             install completion it will speed up your console
+// `,
+//             title: 'Install this util',
+//             help: 'Its big help when you call --help'
+//         },
+//         hep: {
+//             title: 'Hep is help tester'
+//         },
         component: {
             title: 'Generates component',
             arguments: ['name', 'dir'],

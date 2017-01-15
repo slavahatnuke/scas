@@ -20,6 +20,7 @@ module.exports = class Workspace {
 
     load(context) {
         return Promise.resolve()
+            .then(() => this.context = context)
             .then(() => new Imports().load(context))
             .then((imports) => this.imports = imports)
 
