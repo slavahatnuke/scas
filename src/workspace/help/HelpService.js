@@ -2,12 +2,12 @@ let Hint = require('./Hint');
 let _ = require('lodash');
 
 module.exports = class HelpService {
-    constructor() {
-
+    constructor(importLoader) {
+        this.importLoader = importLoader;
     }
 
     actionsHelp(workspace, actions) {
-        let result = new Hint('Help');
+        let result = new Hint('');
 
         return Promise.resolve()
             .then(() => {
@@ -15,7 +15,7 @@ module.exports = class HelpService {
             })
             .then((helps) => {
                 helps.map((help) => {
-                    help.name = 'Help11';
+                    help.name = '';
                     result.add(help)
                 })
             })
@@ -25,28 +25,36 @@ module.exports = class HelpService {
     actionHelp(workspace, action) {
         return Promise.resolve()
             .then(() => {
-                let result = new Hint('Help');
+                let result = new Hint('');
 
-                let actionHint = new Hint(action.name);
+                return Promise.resolve()
+                    .then(() => {
+                        let actionHint = new Hint(action.name);
+                        result.add(actionHint);
 
-                actionHint.title = action.title;
-                actionHint.description = action.description;
-                actionHint.help = action.help;
+                        actionHint.title = action.title;
+                        actionHint.description = action.description;
+                        actionHint.help = action.help;
 
-                let actionRequires = action.getRequires();
-                if (actionRequires.length) {
-                    let requireHint = new Hint('requires');
-                    requireHint.title = actionRequires.join(', ');
-                    actionHint.add(requireHint);
-                }
+                        let actionRequires = action.getRequires();
+                        if (actionRequires.length) {
+                            let requireHint = new Hint('requires');
+                            requireHint.title = actionRequires.join(', ');
+                            actionHint.add(requireHint);
+                        }
 
-                actionHint.title = action.title;
-                actionHint.description = action.description;
-                actionHint.help = action.help;
-
-                result.add(actionHint);
-
-                return result;
+                        return actionHint;
+                    })
+                    .then((actionHint) => {
+                        if(action.nestedImport) {
+                            return Promise.resolve()
+                                .then(() => this.importLoader.load(action.workspace))
+                                .then(() => action.workspace.actions.find())
+                                .then((actions) => this.help(action.workspace))
+                                .then((help) => actionHint.add(help));
+                        }
+                    })
+                    .then(() => result);
             });
     }
 
@@ -59,14 +67,13 @@ module.exports = class HelpService {
             .then((actions) => {
                 actions.map((action) => {
                     let actionHint = new Hint(action.name);
+                    hint.add(actionHint);
                     actionHint.title = action.title;
                     actionHint.description = action.description;
-                    hint.add(actionHint);
                 });
             })
             .then(() => hint)
     }
-
 
     renderOffset(text, offset) {
         offset = offset >= 0 ? offset : 0;
@@ -86,7 +93,7 @@ module.exports = class HelpService {
 
                 console.log(`${this.renderOffset(hint.name, leftOffset)}${this.renderOffset(hint.title, titleOffset)}`);
 
-                if (hint.description) {
+                if (!hint.help && hint.description) {
                     console.log(`${this.renderOffset(hint.description, descriptionOffset)}`);
                     console.log('');
                 }
@@ -100,7 +107,7 @@ module.exports = class HelpService {
                 return Promise.all(hints.map((hint) => this.renderHint(hint)))
                     .then(() => {
                         if (hints.length) {
-                            console.log('');
+                            // console.log('');
                         }
                     });
 

@@ -8,7 +8,8 @@ module.exports = class HelpHandler extends Handler {
     }
 
     handle(workspace, action, request) {
-        return Promise.resolve().then(() => this.helpService.actionHelp(workspace, action));
+        return Promise.resolve()
+            .then(() => this.helpService.actionHelp(workspace, action));
     }
 
     supports(workspace, action, request) {

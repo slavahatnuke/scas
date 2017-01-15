@@ -32,7 +32,9 @@ container.add('workspace.action.GenerateHandler', require('./src/workspace/actio
 container.add('workspace.action.HelpHandler', require('./src/workspace/action/handler/HelpHandler'), ['HelpService']);
 
 
-container.add('HelpService', require('./src/workspace/help/HelpService'), []);
+container.add('HelpService', require('./src/workspace/help/HelpService'), [
+    'import.Loader'
+]);
 
 container.add('Autocompleter', require('./src/workspace/autocomplete/Autocompleter'), [
     'workspace.action.Matcher',

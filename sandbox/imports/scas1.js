@@ -6,6 +6,7 @@ module.exports = {
     actions: {
         abc: {
             title: 'Imported 1 command',
+            help: 'abc help',
             arguments: ['dir', 'name']
         },
         def: {

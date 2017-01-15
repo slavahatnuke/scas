@@ -57,6 +57,10 @@ module.exports = class Hint {
     }
 
     getHints() {
+        this.hints.map((hint) => {
+            hint.level = this.level + 1;
+            hint.getHints();
+        });
         return this.hints;
     }
 };

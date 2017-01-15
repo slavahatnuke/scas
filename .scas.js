@@ -23,10 +23,10 @@ It should help you to improve development skills :) `,
         help: {
             title: 'Help',
             description: `
-Help about this command to make sure that you understand it please call --help 
+Help about this command to make sure that you understand it please call help 
 it will give you some exmaplesn it will give you some exmaples
 `,
-            help: 'Its big help when you call --help'
+            help: 'tap $ `scas --completion` or once `scas --completion-install` and reload terminal'
         },
 //         'install-it': {
 //             description: `
