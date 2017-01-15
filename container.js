@@ -2,6 +2,7 @@ let Container = require('plus.container');
 let container = new Container();
 
 container.add('Scas', require('./src/Scas'), ['config.Loader', 'WorkspaceService']);
+container.add('ImportScas', require('./src/Scas'), ['config.Loader', 'WorkspaceService']);
 
 container.add('CLI', require('./src/cli/CLI'), ['CLI.parser', 'Scas']);
 container.add('CLI.parser', require('./src/cli/Parser'), []);
@@ -10,7 +11,8 @@ container.add('config.Loader', require('./src/config/Loader'), []);
 container.add('WorkspaceService', require('./src/workspace/WorkspaceService'), [
     'workspace.AutoCompleteHandler',
     'workspace.CallHandler',
-    'HelpService'
+    'HelpService',
+    'import.Loader'
 ]);
 
 container.add('workspace.AutoCompleteHandler', require('./src/workspace/handler/AutoCompleteHandler'), [
@@ -40,5 +42,9 @@ container.add('Logger', require('./src/logger/_logger'));
 Object.logger = container.Logger;
 
 container.add('TemplateService', require('./src/template/TemplateService'));
+
+container.add('import.Loader', require('./src/workspace/import/Loader'), [
+    'config.Loader'
+]);
 
 module.exports = container;

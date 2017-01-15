@@ -5,16 +5,23 @@ module.exports = class Loader {
     }
 
     load(context) {
+        let path = context.configPath;
+        let config = new Config();
+
         return this.resolve(context)
-            .then((path) => require(context.configPath))
+            .then((path) => config.path = path)
+            .then(() => require(config.path))
             .catch(() => null)
             .then((data) => {
                 return data || Promise.resolve()
-                        .then(() => require('path').resolve(context.configPath))
-                        .then((path) => path && require(path));
+                        .then(() => require('path').resolve(path))
+                        .then((path) => config.path = path)
+                        .then(() => require(config.path));
             })
             .catch(() => null)
-            .then((data) => new Config(data || {}));
+            .then((data) => config.apply(data))
+            .then(() => context.dir = config.dir)
+            .then(() => config);
     }
 
     resolve(context) {

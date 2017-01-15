@@ -10,8 +10,8 @@ module.exports = class Actions {
         return Promise.resolve()
             .then(() => {
                 _.each(context.config.actions, (value, name) => {
-                    value.name = (''+name).trim();
-                    this.actions.push(new Action(value))
+                    value.name = ('' + name).trim();
+                    this.add(new Action(value))
                 });
             })
             .then(() => this);
@@ -25,4 +25,11 @@ module.exports = class Actions {
         return Promise.resolve()
             .then(() => this.actions.filter(finder));
     }
+
+    add(action) {
+        Promise.resolve().then(() => this.actions.push(action))
+            .then(() => this);
+    }
+
+
 }

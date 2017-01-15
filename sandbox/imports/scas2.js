@@ -4,8 +4,11 @@ module.exports = {
     help: '[2] There is help',
 
     actions: {
-        im2: {
-            title: '[2] Imported command'
+        im: {
+            title: '[2] Imported command',
+            arguments: ['name', 'dir'],
+            input: 'template/im.js',
+            out: '{{{ dir }}}/{{{ name }}}.class.js'
         }
     }
 }

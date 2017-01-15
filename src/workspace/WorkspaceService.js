@@ -3,10 +3,11 @@ let Hint = require('./help/Hint');
 let _ = require('lodash');
 
 module.exports = class WorkspaceService {
-    constructor(autoCompleteHandler, callHandler, helpService) {
+    constructor(autoCompleteHandler, callHandler, helpService, importLoader) {
         this.autoCompleteHandler = autoCompleteHandler;
         this.callHandler = callHandler;
         this.helpService = helpService;
+        this.importLoader = importLoader;
     }
 
     handle(workspace, request) {
@@ -25,8 +26,20 @@ module.exports = class WorkspaceService {
     }
 
     create(context) {
+        let workspace = new Workspace();
         return Promise.resolve()
-            .then(() => new Workspace().load(context))
+            .then(() => workspace.load(context))
+            .then(() => {
+                return workspace.actions.find()
+                    .then((actions) => {
+                        return Promise.all(actions.map((action) => {
+                            return Promise.resolve()
+                                .then(() => action.workspace = workspace);
+                        }));
+                    })
+            })
+            .then(() => this.importLoader.load(workspace))
+            .then(() => workspace)
     }
 
     getHandler(workspace, request) {

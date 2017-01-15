@@ -2,6 +2,9 @@ let _ = require('lodash');
 
 module.exports = class Action {
     constructor(config) {
+        this.config = config;
+        this.workspace = null;
+
         this.name = config.name || null;
         this.title = config.title || null;
         this.description = config.description || null;

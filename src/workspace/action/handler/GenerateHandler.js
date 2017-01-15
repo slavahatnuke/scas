@@ -28,6 +28,9 @@ module.exports = class GenerateHandler extends Handler {
                         return Promise.resolve()
                             .then(() => $action.get('input'))
                             .then((input) => {
+
+                                input = action.workspace.context.dir + '/' + input;
+
                                 let hint = new Hint('input');
                                 hint.title = input;
 
