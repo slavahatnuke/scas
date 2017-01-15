@@ -31,5 +31,9 @@ module.exports = class Actions {
             .then(() => this);
     }
 
+    getNames() {
+        return this.find().then((actions) => actions.map((action) => action.name));
+    }
+
 
 }

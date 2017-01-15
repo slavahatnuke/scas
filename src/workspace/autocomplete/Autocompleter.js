@@ -3,15 +3,13 @@ let glob = require('glob');
 let fs = require('fs');
 
 module.exports = class Autocompleter {
-    constructor(actionMatcher) {
+    constructor(actionMatcher, importLoader) {
         this.logger = Object.logger;
         this.actionMatcher = actionMatcher;
+        this.importLoader = importLoader;
     }
 
     findAutocomplete(workspace, rawArguments) {
-
-        // this.logger.log(rawArguments);
-
         let command = _.first(rawArguments);
         let commandStarts = new RegExp(`^${_.escapeRegExp('' + command)}`, 'igm');
 
@@ -34,7 +32,13 @@ module.exports = class Autocompleter {
                     let action = actions[0];
 
                     if (action.active) {
-                        return this.completeArguments(workspace, rawArguments, action);
+                        if (action.nestedImport) {
+                            return Promise.resolve()
+                                .then(() => this.importLoader.load(action.workspace))
+                                .then(() => this.findAutocomplete(action.workspace, rawArguments.slice(1)));
+                        } else {
+                            return this.completeArguments(action.workspace, rawArguments, action);
+                        }
                     } else {
                         words.push(action.name);
                     }
@@ -47,74 +51,77 @@ module.exports = class Autocompleter {
     }
 
     completeArguments(workspace, rawArguments, action) {
-        let args = rawArguments.slice(1);
-
-        let lastWord = _.last(args);
-        let currentArgument = action.arguments.find((arg) => arg.name == lastWord);
-
-        if (args % 2) {
-            // command
-        } else {
-            // value
-            let prevWord = args.length >= 2 ? args[args.length - 2] : null;
-            currentArgument = currentArgument || action.arguments.find((arg) => arg.name == prevWord);
-        }
-
-        let isLastWordArgument = currentArgument && currentArgument.name == lastWord;
-
         return Promise.resolve()
             .then(() => {
-                if (!action.arguments.length) {
-                    return [];
+                let args = rawArguments.slice(1);
+
+                let lastWord = _.last(args);
+                let currentArgument = action.arguments.find((arg) => arg.name == lastWord);
+
+                if (args % 2) {
+                    // command
+                } else {
+                    // value
+                    let prevWord = args.length >= 2 ? args[args.length - 2] : null;
+                    currentArgument = currentArgument || action.arguments.find((arg) => arg.name == prevWord);
                 }
 
-                if (!args.length) {
-                    return this.getNoneActiveArguments(action);
-                }
+                let isLastWordArgument = currentArgument && currentArgument.name == lastWord;
 
                 return Promise.resolve()
-                    .then(() => this.actionMatcher.fillArguments(args, action))
                     .then(() => {
-                        if (args.length % 2) {
-                            // argument
-                            if (isLastWordArgument) {
-                                return [];
-                            } else {
-                                return this.getNoneActiveArguments(action);
-                            }
+                        if (!action.arguments.length) {
+                            return [];
+                        }
+
+                        if (!args.length) {
+                            return this.getNoneActiveArguments(action);
+                        }
+
+                        return Promise.resolve()
+                            .then(() => this.actionMatcher.fillArguments(args, action))
+                            .then(() => {
+                                if (args.length % 2) {
+                                    // argument
+                                    if (isLastWordArgument) {
+                                        return [];
+                                    } else {
+                                        return this.getNoneActiveArguments(action);
+                                    }
+                                } else {
+                                    // value
+                                    if (isLastWordArgument) {
+                                        return this.getNoneActiveArguments(action);
+                                    } else {
+                                        return [];
+                                    }
+                                }
+                            })
+                    })
+                    .then((words) => {
+                        this.log('>>>', words);
+                        return words;
+                    })
+                    .then((words) => {
+                        if (words && words.length) {
+                            return words;
                         } else {
-                            // value
-                            if (isLastWordArgument) {
-                                return this.getNoneActiveArguments(action);
-                            } else {
-                                return [];
-                            }
+                            return Promise.resolve()
+                                .then(() => {
+                                    let path = isLastWordArgument ? '' : lastWord;
+                                    return this.readDir(path)
+                                        .then((theWords) => {
+                                            words = [].concat(theWords, this.getNoneActiveArguments(action))
+                                        });
+                                })
+                                .then(() => words);
                         }
                     })
-            })
-            .then((words) => {
-                // this.logger.log('>>>', words);
-                return words;
-            })
-            .then((words) => {
-                if (words && words.length) {
-                    return words;
-                } else {
-                    return Promise.resolve()
-                        .then(() => {
-                            let path = isLastWordArgument ? '' : lastWord;
-                            return this.readDir(path)
-                                .then((theWords) => {
-                                    words = [].concat(theWords, this.getNoneActiveArguments(action))
-                                });
-                        })
-                        .then(() => words);
-                }
-            })
-            .then((words) => {
-                // this.logger.log('>>>', words);
-                return words;
-            })
+                    .then((words) => {
+                        this.log('>>>', words);
+                        return words;
+                    })
+            });
     }
 
     readDir(path) {
@@ -157,6 +164,10 @@ module.exports = class Autocompleter {
     getNoneActiveArguments(action) {
         return action.arguments.filter((arg) => !arg.active)
             .map((arg) => arg.name);
+    }
+
+    log(message) {
+        this.logger.log.apply(this.logger, arguments)
     }
 
 }

@@ -35,7 +35,8 @@ container.add('workspace.action.HelpHandler', require('./src/workspace/action/ha
 container.add('HelpService', require('./src/workspace/help/HelpService'), []);
 
 container.add('Autocompleter', require('./src/workspace/autocomplete/Autocompleter'), [
-    'workspace.action.Matcher'
+    'workspace.action.Matcher',
+    'import.Loader'
 ]);
 
 container.add('Logger', require('./src/logger/_logger'));

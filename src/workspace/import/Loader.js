@@ -39,6 +39,7 @@ module.exports = class Loader {
         let importedAction = new ImportedAction(importedWorkspace.context.config);
         importedAction.name = aImport.as;
         importedAction.workspace = importedWorkspace;
+        importedAction.nestedImport = true;
 
         return Promise.resolve()
             .then(() => workspace.actions.add(importedAction))

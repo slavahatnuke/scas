@@ -4,8 +4,12 @@ module.exports = {
     help: 'There is help',
 
     actions: {
-        im: {
-            title: 'Imported command'
+        abc: {
+            title: 'Imported 1 command',
+            arguments: ['dir', 'name']
+        },
+        def: {
+            title: 'Imported 2 command'
         }
     }
 }
