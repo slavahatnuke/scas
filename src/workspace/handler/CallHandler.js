@@ -9,7 +9,7 @@ module.exports = class CallHandler extends Handler {
     }
 
     handle(workspace, request) {
-        return this.actionMatcher.match(workspace, request)
+        return this.actionMatcher.match(workspace, request.rawArguments)
             .then((actions) => {
                 if (actions.length == 1) {
                     return this.execute(workspace, actions[0], request);
@@ -22,12 +22,13 @@ module.exports = class CallHandler extends Handler {
     }
 
     execute(workspace, action, request) {
-        return this.actionMatcher.fillArguments(request.arguments.slice(1), action)
+        // console.log('action', action);
+        return Promise.resolve()
             .then(() => action.isValid())
             .then((isValid) => {
                 if (isValid) {
                     return this.getActionHandler(workspace, action, request)
-                        .then((handler) => handler.handle(workspace, action, request));
+                        .then((handler) => handler.handle(action.workspace, action, request));
                 } else {
                     return this.helpService.actionHelp(workspace, action)
                 }

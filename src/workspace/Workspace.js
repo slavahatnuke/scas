@@ -35,6 +35,15 @@ module.exports = class Workspace {
                 this.description = context.config.description;
                 this.help = context.config.help;
             })
+            .then(() => {
+                return this.actions.find()
+                    .then((actions) => {
+                        return Promise.all(actions.map((action) => {
+                            return Promise.resolve()
+                                .then(() => action.workspace = this);
+                        }));
+                    })
+            })
             .then(() => this);
     }
 

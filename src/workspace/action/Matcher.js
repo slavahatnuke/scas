@@ -1,16 +1,17 @@
 let _ = require('lodash');
 
 module.exports = class Matcher {
-    constructor() {
+    constructor(importLoader) {
         this.logger = Object.logger;
+        this.importLoader = importLoader;
     }
 
-    match(workspace, request) {
-        return this.find(workspace, request);
+    match(workspace, rawArguments) {
+        return this.find(workspace, rawArguments);
     }
 
-    find(workspace, request) {
-        let command = _.first(request.rawArguments);
+    find(workspace, rawArguments) {
+        let command = _.first(rawArguments);
         let commandStarts = new RegExp(`^${_.escapeRegExp('' + command)}$`, 'igm');
 
         return Promise.resolve()
@@ -24,6 +25,46 @@ module.exports = class Matcher {
                     return commandStarts.test(action.name);
                 });
             })
+            .then((actions) => {
+                return Promise.resolve()
+                    .then(() => {
+                        if (actions.length == 1 && actions[0].active && actions[0].nestedImport) {
+                            let action = actions[0];
+
+                            return Promise.resolve()
+                                .then(() => {
+                                    if (action.nestedImport) {
+                                        return this.importLoader.load(action.workspace);
+                                    }
+                                })
+                                .then(() => this.match(action.workspace, rawArguments.slice(1)))
+                                .then((subActions) => {
+                                    if (!subActions.length) {
+                                        return actions;
+                                    }
+
+                                    if (subActions.length == 1) {
+                                        return subActions;
+                                    }
+
+                                    return subActions;
+                                });
+                        } else {
+                            return actions;
+                        }
+                    });
+            })
+            .then((actions) => {
+                if (actions.length == 1 && actions[0].active) {
+                    let action = actions[0];
+
+                    return this.fillArguments(rawArguments.slice(1), action)
+                        .then(() => actions);
+                } else {
+                    return actions;
+                }
+            })
+
     }
 
     fillArguments(args, action) {

@@ -29,15 +29,6 @@ module.exports = class WorkspaceService {
         let workspace = new Workspace();
         return Promise.resolve()
             .then(() => workspace.load(context))
-            .then(() => {
-                return workspace.actions.find()
-                    .then((actions) => {
-                        return Promise.all(actions.map((action) => {
-                            return Promise.resolve()
-                                .then(() => action.workspace = workspace);
-                        }));
-                    })
-            })
             .then(() => this.importLoader.load(workspace))
             .then(() => workspace)
     }
