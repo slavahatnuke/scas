@@ -12,7 +12,7 @@ module.exports = class GenerateHandler extends Handler {
     }
 
     handle(workspace, action, request) {
-        let result = new Hint();
+        let result = new Hint(action.name);
 
         return Promise.resolve()
             .then(() => {
@@ -54,7 +54,7 @@ module.exports = class GenerateHandler extends Handler {
                                         result.add(hint);
 
                                         hint = new Hint('content');
-                                        hint.title = out.replace(/\n/igm, ' ').slice(0, 50) + '...';
+                                        hint.title = out.replace(/[\n\s]+/igm, ' ').slice(0, 60) + '...';
                                         result.add(hint);
 
                                         return Promise.resolve()
