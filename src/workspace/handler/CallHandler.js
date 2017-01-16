@@ -21,24 +21,24 @@ module.exports = class CallHandler extends Handler {
             });
     }
 
-    execute(workspace, action, request) {
+    execute(workspace, action) {
         // console.log('action', action);
         return Promise.resolve()
             .then(() => action.isValid())
             .then((isValid) => {
                 if (isValid) {
-                    return this.getActionHandler(workspace, action, request)
-                        .then((handler) => handler.handle(action.workspace, action, request));
+                    return this.getActionHandler(workspace, action)
+                        .then((handler) => handler.handle(action.workspace, action));
                 } else {
                     return this.helpService.actionHelp(workspace, action)
                 }
             });
     }
 
-    getActionHandler(workspace, action, request) {
+    getActionHandler(workspace, action) {
         return Promise.resolve()
             .then(() => {
-                return this.actionHandlers.find((handler) => handler.supports(workspace, action, request))
+                return this.actionHandlers.find((handler) => handler.supports(workspace, action))
             })
     }
 }

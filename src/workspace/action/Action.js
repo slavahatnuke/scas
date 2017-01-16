@@ -10,12 +10,14 @@ module.exports = class Action {
         this.description = config.description || null;
         this.help = config.help || null;
         this.example = config.example || null;
+        this.batch = null;
 
-        this.input = config.input || null;
-        this.out = config.out || null;
+        this.input = config.input || config.in || null;
+        this.out = config.output || config.out || null;
 
         this.prepareArguments(config);
         this.prepareOptions(config);
+        this.prepareBatch(config);
 
         this.active = false;
 
@@ -70,5 +72,25 @@ module.exports = class Action {
         return this.arguments
             .filter((arg) => !arg.active || arg.value == null)
             .map((arg) => arg.name);
+    }
+
+    prepareBatch(config) {
+        if(_.isArray(config.batch)) {
+            this.batch = config.batch.map((action) => {
+
+                let item = {
+                    name: null,
+                    map: {}
+                };
+
+                if(_.isString(action)) {
+                    item.name = action
+                } else {
+                    _.assign(item, action);
+                }
+
+                return item;
+            });
+        }
     }
 }

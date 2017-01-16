@@ -1,6 +1,9 @@
 let Workspace = require('./Workspace');
 let Hint = require('./help/Hint');
 let _ = require('lodash');
+let BatchResult = require('./action/handler/BatchResult');
+let Action = require('./action/Action');
+let async = require('async');
 
 module.exports = class WorkspaceService {
     constructor(autoCompleteHandler, callHandler, helpService, importLoader) {
@@ -47,6 +50,20 @@ module.exports = class WorkspaceService {
     render(result) {
         if (result instanceof Hint) {
             return this.helpService.renderHint(result);
+        } else if (result instanceof BatchResult) {
+            return Promise.resolve()
+                .then(() => result.getResults())
+                .then((results) => {
+                    return new Promise((resolve, reject) => {
+                        async.eachSeries(results, (result, next) => {
+                            this.render(result).then(() => next()).catch(next)
+                        }, (err) => err ? reject(err) : resolve())
+                    });
+                });
+        } else if (result instanceof Action) {
+            let action = result;
+            return this.callHandler.execute(action.workspace, action, null)
+                .then((result) => this.render(result));
         } else {
             console.log('>> result', result);
         }

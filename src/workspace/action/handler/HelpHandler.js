@@ -12,7 +12,7 @@ module.exports = class HelpHandler extends Handler {
             .then(() => this.helpService.actionHelp(workspace, action));
     }
 
-    supports(workspace, action, request) {
+    supports(workspace, action) {
         return true;
     }
 

@@ -3,7 +3,7 @@ module.exports = class Handler {
         return Promise.resolve();
     }
 
-    supports(workspace, action, request) {
+    supports(workspace, action) {
         return false;
     }
 }

@@ -44,14 +44,30 @@ it will give you some exmaplesn it will give you some exmaples
             description: `Some info here`,
             help: `It will generate component in this way`,
             input: 'sandbox/generate/generate.txt',
-            out: '{{{ dir }}}/{{{ name }}}.js'
+            out: '{{{ dir }}}/{{{ name }}}.component.js'
         },
         'class': {
             title: 'Class maker',
             arguments: ['name', 'dir'],
             help: `It generates ES6 class`,
             input: 'sandbox/es6/class.js',
-            out: '{{{ dir }}}/{{{ name | Camel }}}.js'
+            out: '{{{ dir }}}/{{{ name | Camel }}}.class.js'
+        },
+        module: {
+            title: 'Module',
+            arguments: ['dir', 'name', 'className'],
+            batch: [
+                'component',
+                {
+                    name: 'class',
+                    map: {
+                        name: 'Hoppa {{{ className }}}',
+                        dir: `
+{{{ dir }}}/{{{ className | toArray | first | toString | Camel }}}/{{{ className | toArray | slice(1) | toString | lower }}}
+`
+                    }
+                }
+            ]
         }
     },
     pipes: {

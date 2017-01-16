@@ -76,7 +76,7 @@ module.exports = class GenerateHandler extends Handler {
             });
     }
 
-    supports(workspace, action, request) {
+    supports(workspace, action) {
         return action.input && action.out;
     }
 

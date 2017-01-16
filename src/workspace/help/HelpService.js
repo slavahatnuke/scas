@@ -1,5 +1,6 @@
 let Hint = require('./Hint');
 let _ = require('lodash');
+let async = require('async');
 
 module.exports = class HelpService {
     constructor(importLoader) {
@@ -46,7 +47,7 @@ module.exports = class HelpService {
                         return actionHint;
                     })
                     .then((actionHint) => {
-                        if(action.nestedImport) {
+                        if (action.nestedImport) {
                             return Promise.resolve()
                                 .then(() => this.importLoader.load(action.workspace))
                                 .then(() => action.workspace.actions.find())
@@ -104,12 +105,20 @@ module.exports = class HelpService {
                 }
 
                 let hints = hint.getHints();
-                return Promise.all(hints.map((hint) => this.renderHint(hint)))
-                    .then(() => {
-                        if (hints.length) {
-                            // console.log('');
-                        }
-                    });
+                return new Promise((resolve, reject) => {
+                    async.eachSeries(hints, (hint, next) => {
+                        this.renderHint(hint).then(() => next()).catch(next)
+                    }, (err) => err ? reject(err) : resolve())
+                });
+
+                // require('as').
+                //
+                // return Promise.all(hints.map((hint) => this.renderHint(hint)))
+                //     .then(() => {
+                //         if (hints.length) {
+                //             // console.log('');
+                //         }
+                //     });
 
             });
     }

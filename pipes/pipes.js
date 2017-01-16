@@ -38,5 +38,14 @@ module.exports = {
     Plural: (context) => (input) => _.upperFirst(pluralize.plural(input)),
 
     singular: (context) => (input) => pluralize.singular(input),
-    Singular: (context) => (input) => _.upperFirst(pluralize.singular(input))
+    Singular: (context) => (input) => _.upperFirst(pluralize.singular(input)),
+
+    toArray: (context) => (text) => _.snakeCase(text).split('_'),
+    toString: (context) => (array) => _.isArray(array) ? array.join('_') : '' + array,
+
+    first: (context) => (array) => _.first(array),
+    last: (context) => (array) => _.last(array),
+
+    slice: (context) => (input, start, end) => _.slice(input, start, end),
+    join: (context) => (input, separator) => _.join(input, separator || ''),
 }

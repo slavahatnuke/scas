@@ -92,4 +92,19 @@ module.exports = class Matcher {
                 });
             });
     }
+
+    fillArgumentsByObject(object, action) {
+        return Promise.resolve()
+            .then(() => {
+                _.each(object, (value, name) => {
+                    let actionArgument = action.arguments.find((actionArgument) => actionArgument.name == name);
+
+                    if (actionArgument) {
+                        actionArgument.value = value;
+                        actionArgument.active = true;
+                    }
+                });
+            });
+    }
+
 }

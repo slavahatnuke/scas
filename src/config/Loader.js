@@ -1,7 +1,8 @@
 let Config = require('./Config');
 
 module.exports = class Loader {
-    constructor() {
+    constructor(systemDir) {
+        this.systemDir = systemDir;
     }
 
     load(context) {
@@ -32,8 +33,14 @@ module.exports = class Loader {
             .then((path) => {
                 return path || Promise.resolve()
                         .then(() => require(context.dir + '/' + context.configPath))
-                        .then(() => context.dir + '/' + context.configPath)
-                        .catch(() => null);
+                        .then(() => context.dir + '/' + context.configPath);
             })
+            .catch(() => null)
+            .then((path) => {
+                return path || Promise.resolve()
+                        .then(() => require(this.systemDir + '/' + context.configPath))
+                        .then(() => this.systemDir + '/' + context.configPath);
+            })
+            .catch(() => null)
     }
 };

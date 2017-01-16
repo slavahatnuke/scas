@@ -14,12 +14,12 @@ module.exports = class Pipes {
 
     loadPipes(context, pipes) {
         _.each(pipes, (pipe, name) => {
-            this.pipes[name] = (input) => {
+            this.pipes[name] = (...args) => {
                 if (_.isFunction(pipe)) {
                     let _pipe = pipe(context);
 
                     if (_.isFunction(_pipe)) {
-                        return _pipe(input);
+                        return _pipe.apply(null, args);
                     } else {
                         return '--wrong pipe--';
                     }
