@@ -27,6 +27,10 @@ module.exports = class Loader {
 
     resolve(context) {
         return Promise.resolve()
+            .then(() => {
+                context.configPath = require.resolve(context.configPath)
+            })
+            .catch(() => null)
             .then(() => require(context.configPath))
             .then(() => context.configPath)
             .catch(() => null)
