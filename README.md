@@ -465,5 +465,5 @@ Or you can make your custom pipes and declare in the pipe section.
 ```
 
 
-Have a fun.
+Have a fun [+1G Team](http://plus1generation.com/)
 
