@@ -1,7 +1,7 @@
 {
   "name": "scas",
-  "version": "0.0.6",
-  "description": "scas",
+  "version": "0.0.7",
+  "description": "scas - Scaffolding console",
   "main": "index.js",
   "bin": {
     "scas": "./bin/scas.js",
@@ -16,7 +16,11 @@
     "url": "git+https://github.com/slavahatnuke/scas.git"
   },
   "keywords": [
-    "scas"
+    "scas",
+    "scaffolding",
+    "generator",
+    "template",
+    "console"
   ],
   "author": "slava hotnuke",
   "license": "ISC",
