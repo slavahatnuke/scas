@@ -99,7 +99,7 @@ module.exports = class Autocompleter {
                             })
                     })
                     .then((words) => {
-                        this.log('>>>', words);
+                        // this.log('>>>', words);
                         return words;
                     })
                     .then((words) => {
@@ -118,7 +118,7 @@ module.exports = class Autocompleter {
                         }
                     })
                     .then((words) => {
-                        this.log('>>>', words);
+                        // this.log('>>>', words);
                         return words;
                     })
             });
