@@ -9,29 +9,28 @@ module.exports = {
     actions: {
         class: {
             title: 'Class maker - example',
-            // arguments: ['dir', 'name'],
-            // input: 'path/to/template/class.js',
-            // out: '{{{ dir }}}/{{{ name | Camel }}}.class.js'
+            arguments: ['dir', 'name'],
+            input: './class.js',
+            out: '{{{ dir }}}/{{{ name | Camel }}}.class.js'
         },
         module: {
             title: 'Module maker - batch example',
-            // arguments: ['dir', 'name'],
-            // batch: [
-            //     {
-            //         name: 'class',
-            //         map: {
-            //             dir: '{{{ dir }}}',
-            //             name: '{{{ name }}}'
-            //         }
-            //     },
-            //     {
-            //         name: 'class',
-            //         map: {
-            //             dir: '{{{ dir }}}',
-            //             name: '{{{ name }}}Module'
-            //         }
-            //     }
-            // ]
+            arguments: ['dir', 'name'],
+            batch: [
+                {
+                    name: 'class',
+                    map: {
+                        dir: '{{{ dir }}}',
+                        name: '{{{ name | Camel }}}'
+                    }
+                },
+                {
+                    name: 'class',
+                    map: {
+                        name: '{{{ name | Camel }}}Module'
+                    }
+                }
+            ]
         }
     }
 }
