@@ -1,16 +1,36 @@
 module.exports = {
-    title: '$ scas - is cli helper',
-    description: 'more info here',
+    title: '$ scas [actions] <arguments> <options>',
+    description: 'Scaffolding console',
     actions: {
         help: {
             title: 'Help',
-            description: 'more info here',
-            help: 'HELP here more info here',
+            help: '$ scas',
         },
         init: {
             title: 'Init .scas.js',
             in: 'scas/init.js',
             out: '.scas.js'
+        },
+        'completion-help': {
+            title: 'Completion help',
+        help: `
+## Setup automaticaly
+$ scas --completion-install
+
+## Or setup manually
+$ scas --completion > your/cutom/path/scas.completion.sh
+
+## Add to your ~/.profile or ~/.bash_profile or ~/.bashrc
+source your/cutom/path/scas.completion.sh
+
+## Please restart your terminal
+`
+        },
+        '--completion-install': {
+            title: 'Install bash completion'
+        },
+        '--completion': {
+            title: 'Show bash completion'
         }
     }
 }
