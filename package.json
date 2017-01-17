@@ -1,6 +1,6 @@
 {
   "name": "scas",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "scas",
   "main": "index.js",
   "bin": {
