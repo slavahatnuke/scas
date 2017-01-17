@@ -58,8 +58,12 @@ module.exports = class Matcher {
                 if (actions.length == 1 && actions[0].active) {
                     let action = actions[0];
 
-                    return this.fillArguments(rawArguments.slice(1), action)
-                        .then(() => actions);
+                    return Promise.resolve()
+                        .then(() => action.clone())
+                        .then((action) => {
+                            return this.fillArguments(rawArguments.slice(1), action)
+                                .then(() => [action]);
+                        });
                 } else {
                     return actions;
                 }

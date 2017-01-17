@@ -1,6 +1,6 @@
 let Context = require('../../context/Context');
 let Workspace = require('../Workspace');
-let ImportedAction = require('../action/ImportedAction');
+let Action = require('../action/Action');
 
 module.exports = class Loader {
     constructor(configLoader) {
@@ -36,7 +36,8 @@ module.exports = class Loader {
     }
 
     nestedImport(workspace, importedWorkspace, aImport) {
-        let importedAction = new ImportedAction(importedWorkspace.context.config);
+        let importedAction = new Action(importedWorkspace.context.config);
+
         importedAction.name = aImport.as;
         importedAction.workspace = importedWorkspace;
         importedAction.nestedImport = true;
@@ -50,7 +51,7 @@ module.exports = class Loader {
             .then(() => importedWorkspace.actions.find())
             .then((actions) => {
                 return Promise.all(actions.map((action) => {
-                    let importedAction = new ImportedAction(action.config);
+                    let importedAction = new Action(action.config);
                     importedAction.workspace = importedWorkspace;
 
                     return Promise.resolve()

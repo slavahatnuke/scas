@@ -2,7 +2,9 @@ let _ = require('lodash');
 
 module.exports = class Action {
     constructor(config) {
-        this.config = config;
+        this.config = config || {};
+
+        this.nestedImport = false;
         this.workspace = null;
 
         this.name = config.name || null;
@@ -92,5 +94,14 @@ module.exports = class Action {
                 return item;
             });
         }
+    }
+
+    clone() {
+        return Promise.resolve()
+            .then(() => {
+                let action = new Action(this.config);
+                action.workspace = this.workspace;
+                return action;
+            });
     }
 }
