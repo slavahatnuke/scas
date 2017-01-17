@@ -1,36 +1,34 @@
 module.exports = {
     title: '$ scas [actions] <arguments> <options>', // you can rewrite this for you goals
     description: 'Scaffolding console', // you can rewrite this for you goals
-
+    // import other scas files or packages.
     imports: [
-        // it needed to support default help
+        // it needs to support default help
         { path: 'scas/.scas' }
     ],
     actions: {
         class: {
-            title: 'Class maker - example',
-            arguments: ['dir', 'name'],
-            input: './class.js',
-            out: '{{{ dir }}}/{{{ name | Camel }}}.class.js'
+            title: 'Generate class - its your action', // free form title for help
+            arguments: ['dir', 'name'], // required arguments
+            input: 'template/class.js', // path to template
+            out: '{{{ dir }}}/{{{ name | Camel }}}.class.js' // path to generated file
         },
         module: {
-            title: 'Module maker - batch example',
-            arguments: ['dir', 'name'],
+            'title': 'Generate module', // your help line
+            arguments: ['dir', 'name'], // required arguments
             batch: [
+                'class', // #1 re-used: class action with same arguments - simply, generates class file.
                 {
-                    name: 'class',
+                    name: 'class', // #2 re-used class action with mapped arguments, generates module class file.
                     map: {
                         dir: '{{{ dir }}}',
-                        name: '{{{ name | Camel }}}'
-                    }
-                },
-                {
-                    name: 'class',
-                    map: {
-                        name: '{{{ name | Camel }}}Module'
+                        name: '{{{ name }}}Module'
                     }
                 }
             ]
         }
+    },
+    pipes: {
+        myCustomPipe: (context) => (input) => 'my-pipe-changes' + input
     }
 }
