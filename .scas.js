@@ -1,6 +1,10 @@
 module.exports = {
     title: '$ scas [actions] <arguments> <options>',
     description: 'Scaffolding console',
+
+    // comment this
+    // imports: [{path: 'scas/test.js'}],
+
     actions: {
         help: {
             title: 'Help',
@@ -11,9 +15,14 @@ module.exports = {
             in: 'scas/init.js',
             out: '.scas.js'
         },
-        'completion-help': {
+        version: {
+            title: 'Show scas version',
+            call: (query) => console.log(require('./package.json').version)
+        },
+
+        '--completion-help': {
             title: 'Completion help',
-        help: `
+            help: `
 ## Setup automaticaly
 $ scas --completion-install
 

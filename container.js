@@ -36,6 +36,7 @@ container.add('workspace.action.BatchHandler', require('./src/workspace/action/h
     'TemplateService'
 ]);
 
+container.add('workspace.action.CallHandler', require('./src/workspace/action/handler/CallHandler'), ['HelpService']);
 container.add('workspace.action.GenerateHandler', require('./src/workspace/action/handler/GenerateHandler'), ['TemplateService']);
 container.add('workspace.action.HelpHandler', require('./src/workspace/action/handler/HelpHandler'), ['HelpService']);
 

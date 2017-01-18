@@ -65,7 +65,6 @@ module.exports = class WorkspaceService {
             return this.callHandler.execute(action.workspace, action, null)
                 .then((result) => this.render(result));
         } else {
-            console.log('>> result', result);
         }
     }
 

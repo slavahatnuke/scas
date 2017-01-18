@@ -13,6 +13,7 @@ module.exports = class Action {
         this.help = config.help || null;
         this.example = config.example || null;
         this.batch = null;
+        this.call = config.call || null;
 
         this.input = config.input || config.in || null;
         this.out = config.output || config.out || null;
