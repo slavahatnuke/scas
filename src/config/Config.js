@@ -2,6 +2,7 @@ let _ = require('lodash');
 
 module.exports = class Config {
     constructor(data) {
+        this.title = '';
         this.description = '';
         this.help = '';
 

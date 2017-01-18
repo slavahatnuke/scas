@@ -6,45 +6,58 @@ module.exports = class Loader {
     }
 
     load(context) {
-        let path = context.configPath;
+        let configPath = context.configPath;
         let config = new Config();
 
-        return this.resolve(context)
+        return this.resolve(context, configPath)
             .then((path) => config.path = path)
             .then(() => require(config.path))
             .catch(() => null)
-            .then((data) => {
-                return data || Promise.resolve()
-                        .then(() => require('path').resolve(path))
-                        .then((path) => config.path = path)
-                        .then(() => require(config.path));
-            })
-            .catch(() => null)
-            .then((data) => config.apply(data))
+            .then((data) => data && config.apply(data))
             .then(() => context.dir = config.dir)
             .then(() => config);
     }
 
-    resolve(context) {
-        return Promise.resolve()
-            .then(() => {
-                context.configPath = require.resolve(context.configPath)
+    resolve(context, configPath) {
+        let $path = null;
+
+        return Promise.resolve($path)
+            // context dir config
+            .then((path) => {
+                return path || Promise.resolve()
+                        .then(() => $path = context.dir + '/' + configPath)
+                        .then(() => require.resolve($path))
+                        .catch(() => null);
             })
-            .catch(() => null)
-            .then(() => require(context.configPath))
+
+            // npm package or local config
+            .then((path) => {
+                return path || Promise.resolve()
+                        .then(() => $path = configPath)
+                        .then(() => require.resolve($path))
+                        .catch(() => null);
+            })
+
+            // local file
+            .then((path) => {
+                return path || Promise.resolve()
+                        .then(() => $path = require('path').resolve(configPath))
+                        .then(() => require($path))
+                        .then(() => $path)
+                        .catch(() => null);
+            })
+
+            // system (scas dir)
+            .then((path) => {
+                return path || Promise.resolve()
+                        .then(() => $path = this.systemDir + '/' + configPath)
+                        .then(() => require.resolve($path))
+                        .catch(() => null);
+            })
+
+            // final
+            .then((path) => context.configPath = path)
+            .catch(() => context.configPath = null)
             .then(() => context.configPath)
-            .catch(() => null)
-            .then((path) => {
-                return path || Promise.resolve()
-                        .then(() => require(context.dir + '/' + context.configPath))
-                        .then(() => context.dir + '/' + context.configPath);
-            })
-            .catch(() => null)
-            .then((path) => {
-                return path || Promise.resolve()
-                        .then(() => require(this.systemDir + '/' + context.configPath))
-                        .then(() => this.systemDir + '/' + context.configPath);
-            })
-            .catch(() => null)
     }
 };
