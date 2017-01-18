@@ -9,6 +9,17 @@ module.exports = class Template {
 
     init() {
         this.replaces = [
+            // meta template
+            {
+                from: '{{{{',
+                to: '!!!!<!',
+                normalize: true
+            },
+            {
+                from: '}}}}',
+                to: '!>!!!!',
+                normalize: true
+            },
 
             // {% for ... %}
 
@@ -66,7 +77,21 @@ module.exports = class Template {
             {
                 from: '!>>>',
                 to: '}}'
-            }
+            },
+
+            // meta template normalization
+            {
+                from: '}}}',
+                to: '}}}}',
+                normalize: true
+            },
+
+            {
+                from: '{{{',
+                to: '{{{{',
+                normalize: true
+            },
+
         ];
 
         this.replaces = this.replaces.map((replacement) => {

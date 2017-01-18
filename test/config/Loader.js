@@ -20,8 +20,10 @@ describe('config/Loader', () => {
                         "imports": [],
                         "description": "",
                         "help": "",
-
-                        "pipes": {}
+                        "_dir": require('path').resolve(__dirname),
+                        "_path": require('path').resolve(__dirname) + "/config.scas.js",
+                        "pipes": {},
+                        "title": ""
                     }
                 )
             })

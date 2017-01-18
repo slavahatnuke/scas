@@ -38,4 +38,15 @@ describe('template/Template.js', () => {
             })
     })
 
+    it('render {{{{ name }}}}', () => {
+        let template = new Template('Hello {{{{ name }}}}');
+
+        return template
+            .render({name: 'slava'})
+            .then((result) => {
+                assert.equal(result, 'Hello {{{ name }}}')
+            });
+    })
+
+
 })

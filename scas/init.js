@@ -11,7 +11,7 @@ module.exports = {
             title: 'Generate class - its your action', // free form title for help
             arguments: ['dir', 'name'], // required arguments
             input: 'template/class.js', // path to template
-            out: '{{{ dir }}}/{{{ name | Camel }}}.class.js' // path to generated file
+            out: '{{{{ dir }}}}/{{{{ name | Camel }}}}.class.js' // path to generated file
         },
         module: {
             'title': 'Generate module', // your help line
@@ -21,8 +21,8 @@ module.exports = {
                 {
                     name: 'class', // #2 re-used class action with mapped arguments, generates module class file.
                     map: {
-                        dir: '{{{ dir }}}',
-                        name: '{{{ name }}}Module'
+                        dir: '{{{{ dir }}}}',
+                        name: '{{{{ name }}}}Module'
                     }
                 }
             ]
