@@ -29,7 +29,10 @@ module.exports = class CallHandler extends Handler {
 
         return Promise.resolve()
             .then(() => this.templateService.getTemplate(workspace, action.call))
-            .then((template) => template.render(action.getParameters()))
+            .then((template) => template.render(action.getParameters({
+                $$workspace: action.workspace,
+                $$context: action.workspace.context,
+            })))
             .then((call) => {
                 console.log('$', call);
 
