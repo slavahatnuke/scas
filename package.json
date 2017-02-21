@@ -1,6 +1,6 @@
 {
   "name": "scas",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "scas - Scaffolding console",
   "main": "index.js",
   "bin": {

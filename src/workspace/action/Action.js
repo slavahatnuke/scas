@@ -78,7 +78,7 @@ module.exports = class Action {
     }
 
     prepareBatch(config) {
-        if(_.isArray(config.batch)) {
+        if (_.isArray(config.batch)) {
             this.batch = config.batch.map((action) => {
 
                 let item = {
@@ -86,7 +86,7 @@ module.exports = class Action {
                     map: {}
                 };
 
-                if(_.isString(action)) {
+                if (_.isString(action)) {
                     item.name = action
                 } else {
                     _.assign(item, action);
@@ -104,5 +104,9 @@ module.exports = class Action {
                 action.workspace = this.workspace;
                 return action;
             });
+    }
+
+    isInternal() {
+        return /^\./.test(this.name);
     }
 }

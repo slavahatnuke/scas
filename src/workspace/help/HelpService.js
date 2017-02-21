@@ -67,10 +67,12 @@ module.exports = class HelpService {
             .then(() => workspace.actions.find())
             .then((actions) => {
                 actions.map((action) => {
-                    let actionHint = new Hint(action.name);
-                    hint.add(actionHint);
-                    actionHint.title = action.title;
-                    actionHint.description = action.description;
+                    if(!action.isInternal()) {
+                        let actionHint = new Hint(action.name);
+                        hint.add(actionHint);
+                        actionHint.title = action.title;
+                        actionHint.description = action.description;
+                    }
                 });
             })
             .then(() => hint)
