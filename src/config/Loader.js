@@ -22,7 +22,7 @@ module.exports = class Loader {
         let $path = null;
 
         return Promise.resolve($path)
-            // context dir config
+        // context dir config
             .then((path) => {
                 return path || Promise.resolve()
                         .then(() => $path = context.dir + '/' + configPath)
@@ -47,6 +47,15 @@ module.exports = class Loader {
                         .catch(() => null);
             })
 
+            // recursive load to root
+            .then((path) => {
+                return path || Promise.resolve()
+                        .then(() => $path = this.findRecursivelyToParent(configPath))
+                        .then(() => require($path))
+                        .then(() => $path)
+                        .catch(() => null);
+            })
+
             // system (scas dir)
             .then((path) => {
                 return path || Promise.resolve()
@@ -59,5 +68,23 @@ module.exports = class Loader {
             .then((path) => context.configPath = path)
             .catch(() => context.configPath = null)
             .then(() => context.configPath)
+    }
+
+    findRecursivelyToParent(configPath) {
+        let path = require('path');
+        let absolutePath = path.resolve(configPath);
+
+        try {
+            require(absolutePath);
+            // console.log('>> found', absolutePath);
+            return absolutePath;
+        } catch (e) {
+            let dir = path.dirname(absolutePath);
+            let parentDir = path.dirname(dir);
+
+            let name = path.basename(absolutePath);
+
+            return this.findRecursivelyToParent(parentDir + '/' + name);
+        }
     }
 };
