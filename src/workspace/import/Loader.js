@@ -5,10 +5,10 @@ let Action = require('../action/Action');
 module.exports = class Loader {
     constructor(configLoader) {
         this.configLoader = configLoader;
+        this.workspacesCache = {};
     }
 
     load(workspace) {
-
         return Promise.resolve()
             .then(() => {
                 return Promise.all(workspace.imports.map((aImport) => this.loadImport(workspace, aImport)));
@@ -19,9 +19,16 @@ module.exports = class Loader {
         return Promise.resolve()
             .then(() => this.getImportContext(workspace, aImport))
             .then((context) => {
+                let workspacesCacheKey = `${context.dir}:${context.configPath}`;
+
+                if(this.workspacesCache[workspacesCacheKey]) {
+                    return this.workspacesCache[workspacesCacheKey];
+                }
+
                 return Promise.resolve()
                     .then(() => {
                         let importedWorkspace = new Workspace();
+                        this.workspacesCache[workspacesCacheKey] = importedWorkspace;
 
                         return Promise.resolve()
                             .then(() => importedWorkspace.load(context))
@@ -33,7 +40,7 @@ module.exports = class Loader {
                                     return this.plainImport(workspace, importedWorkspace);
                                 }
                             });
-                    });
+                    })
             });
     }
 

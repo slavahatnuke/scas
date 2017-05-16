@@ -3,7 +3,9 @@ module.exports = {
     description: 'Scaffolding console',
 
     // comment this
-    // imports: [{path: 'scas/test.js'}],
+    imports: [{
+        path: 'scas-angular'
+    }],
 
     actions: {
         help: {
