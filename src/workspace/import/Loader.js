@@ -8,6 +8,7 @@ module.exports = class Loader {
     }
 
     load(workspace) {
+
         return Promise.resolve()
             .then(() => {
                 return Promise.all(workspace.imports.map((aImport) => this.loadImport(workspace, aImport)));
@@ -24,6 +25,7 @@ module.exports = class Loader {
 
                         return Promise.resolve()
                             .then(() => importedWorkspace.load(context))
+                            .then(() => this.load(importedWorkspace))
                             .then(() => {
                                 if (aImport.as) {
                                     return this.nestedImport(workspace, importedWorkspace, aImport);
