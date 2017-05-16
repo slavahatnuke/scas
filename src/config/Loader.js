@@ -38,6 +38,14 @@ module.exports = class Loader {
                         .catch(() => null);
             })
 
+            // npm package from node_modules
+            .then((path) => {
+                return path || Promise.resolve()
+                        .then(() => $path = require('fs').resolve(configPath + '/node_modules'))
+                        .then(() => require.resolve($path))
+                        .catch(() => null);
+            })
+
             // local file
             .then((path) => {
                 return path || Promise.resolve()
