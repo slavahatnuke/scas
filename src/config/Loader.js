@@ -10,7 +10,10 @@ module.exports = class Loader {
         let config = new Config();
 
         return this.resolve(context, configPath)
-            .then((path) => config.path = path)
+            .then((path) => {
+                config.path = path;
+                // console.log({path});
+            })
             .then(() => require(config.path))
             .catch(() => null)
             .then((data) => data && config.apply(data))
@@ -79,14 +82,14 @@ module.exports = class Loader {
     }
 
     findRecursivelyToParent(configPath) {
-        let path = require('path');
-        let absolutePath = path.resolve(configPath);
-
         try {
+            let absolutePath = require.resolve(configPath);
             require(absolutePath);
-            // console.log('>> found', absolutePath);
+//            console.log('>> found', absolutePath);
             return absolutePath;
         } catch (e) {
+            let path = require('path');
+            let absolutePath = path.resolve(configPath);
             let dir = path.dirname(absolutePath);
             let parentDir = path.dirname(dir);
 
